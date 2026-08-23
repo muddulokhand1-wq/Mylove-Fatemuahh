@@ -1,5 +1,6 @@
 /* =========================================================
-   FATEMA BIRTHDAY WEBSITE — FINAL SCRIPT
+   FATEMA BIRTHDAY WEBSITE
+   CLEAN FINAL SCRIPT
 ========================================================= */
 
 
@@ -16,12 +17,10 @@ function createHeart() {
     const heart = document.createElement("div");
 
     heart.className = "heart";
+    heart.innerHTML = "❤";
 
-    heart.innerHTML = ["❤", "♡", "💕", "♥"][
-        Math.floor(Math.random() * 4)
-    ];
-
-    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.left =
+        Math.random() * 100 + "vw";
 
     heart.style.fontSize =
         (15 + Math.random() * 25) + "px";
@@ -31,7 +30,9 @@ function createHeart() {
 
     hearts.appendChild(heart);
 
-    setTimeout(() => heart.remove(), 10000);
+    setTimeout(() => {
+        heart.remove();
+    }, 10000);
 }
 
 setInterval(createHeart, 350);
@@ -41,33 +42,48 @@ setInterval(createHeart, 350);
    SCREEN MANAGEMENT
 ========================================================= */
 
-const screens = document.querySelectorAll(".screen");
+const screens =
+    document.querySelectorAll(".screen");
 
-function showScreen(id) {
 
-    const target = document.getElementById(id);
+function showScreen(screenId) {
+
+    const target =
+        document.getElementById(screenId);
 
     if (!target) {
-        console.error("Screen not found:", id);
+        console.error(
+            "Screen not found:",
+            screenId
+        );
         return;
     }
 
     screens.forEach(screen => {
-        screen.classList.remove("active-screen");
-        screen.classList.add("hidden-screen");
+
+        screen.classList.remove(
+            "active-screen"
+        );
+
+        screen.classList.add(
+            "hidden-screen"
+        );
+
     });
 
-    target.classList.remove("hidden-screen");
-    target.classList.add("active-screen");
+    target.classList.remove(
+        "hidden-screen"
+    );
+
+    target.classList.add(
+        "active-screen"
+    );
 
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 
-    if (id === "gameScreen") {
-        startHeartGame();
-    }
 }
 
 
@@ -75,15 +91,22 @@ function showScreen(id) {
    GENERIC NEXT BUTTONS
 ========================================================= */
 
-document.querySelectorAll("[data-next]").forEach(button => {
+document
+    .querySelectorAll("[data-next]")
+    .forEach(button => {
 
-    button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-        showScreen(button.dataset.next);
+                showScreen(
+                    button.dataset.next
+                );
+
+            }
+        );
 
     });
-
-});
 
 
 /* =========================================================
@@ -91,27 +114,35 @@ document.querySelectorAll("[data-next]").forEach(button => {
 ========================================================= */
 
 /*
-   TEMPORARY TEST DATE
-   --------------------------------
-   23 August 2026 — 8:30 PM IST
+   CURRENTLY SET FOR TESTING:
 
-   AFTER TESTING CHANGE THIS BACK TO:
+   23 August 2026
+   8:30 PM IST
+
+   AFTER TESTING CHANGE ONLY THIS LINE TO:
 
    new Date("2026-08-26T14:57:00+05:30")
 */
 
 const birthday =
-    new Date("2026-08-23T20:30:00+05:30");
+    new Date(
+        "2026-08-23T20:30:00+05:30"
+    );
 
 
 const countdown =
-    document.getElementById("countdown");
+    document.getElementById(
+        "countdown"
+    );
+
 
 const countdownButton =
-    document.getElementById("countdownButton");
+    document.getElementById(
+        "countdownButton"
+    );
 
 
-function birthdayUnlocked() {
+function isBirthdayUnlocked() {
 
     return new Date() >= birthday;
 
@@ -120,49 +151,76 @@ function birthdayUnlocked() {
 
 function updateCountdown() {
 
-    if (!countdown || !countdownButton) return;
-
-    const now = new Date();
-
-    const diff = birthday - now;
+    if (!countdown) return;
 
 
-    /* BIRTHDAY ARRIVED */
+    const now =
+        new Date();
 
-    if (diff <= 0) {
+
+    const difference =
+        birthday - now;
+
+
+    /* -----------------------------------------
+       BIRTHDAY ARRIVED
+    ----------------------------------------- */
+
+    if (difference <= 0) {
 
         countdown.innerHTML =
             "🎉 Happy Birthday Fatema ❤️";
 
-        countdownButton.innerHTML =
-            "💌 Open Your Surprise ❤️";
 
-        countdownButton.disabled = false;
+        if (countdownButton) {
+
+            countdownButton.innerHTML =
+                "💌 Open Your Surprise ❤️";
+
+            countdownButton.disabled =
+                false;
+
+        }
 
         return;
     }
 
 
-    /* STILL LOCKED */
+    /* -----------------------------------------
+       COUNTDOWN
+    ----------------------------------------- */
 
     const days =
         Math.floor(
-            diff / 1000 / 60 / 60 / 24
+            difference /
+            1000 /
+            60 /
+            60 /
+            24
         );
+
 
     const hours =
         Math.floor(
-            diff / 1000 / 60 / 60
+            difference /
+            1000 /
+            60 /
+            60
         ) % 24;
+
 
     const minutes =
         Math.floor(
-            diff / 1000 / 60
+            difference /
+            1000 /
+            60
         ) % 60;
+
 
     const seconds =
         Math.floor(
-            diff / 1000
+            difference /
+            1000
         ) % 60;
 
 
@@ -195,16 +253,25 @@ function updateCountdown() {
     `;
 
 
-    countdownButton.innerHTML =
-        "🔒 Opens on 26 August 2026 🎂";
+    if (countdownButton) {
 
-    countdownButton.disabled = true;
+        countdownButton.innerHTML =
+            "🔒 Opens on 26 August 2026 🎂";
+
+        countdownButton.disabled =
+            true;
+
+    }
+
 }
 
 
 updateCountdown();
 
-setInterval(updateCountdown, 1000);
+setInterval(
+    updateCountdown,
+    1000
+);
 
 
 /* =========================================================
@@ -213,30 +280,49 @@ setInterval(updateCountdown, 1000);
 
 if (countdownButton) {
 
-    countdownButton.addEventListener("click", event => {
+    countdownButton.addEventListener(
+        "click",
+        () => {
 
-        event.preventDefault();
+            if (!isBirthdayUnlocked()) {
 
-        if (!birthdayUnlocked()) {
+                countdownButton.animate(
+                    [
+                        {
+                            transform:
+                                "translateX(0)"
+                        },
 
-            countdownButton.animate(
-                [
-                    { transform: "translateX(0)" },
-                    { transform: "translateX(-6px)" },
-                    { transform: "translateX(6px)" },
-                    { transform: "translateX(0)" }
-                ],
-                {
-                    duration: 300
-                }
+                        {
+                            transform:
+                                "translateX(-6px)"
+                        },
+
+                        {
+                            transform:
+                                "translateX(6px)"
+                        },
+
+                        {
+                            transform:
+                                "translateX(0)"
+                        }
+                    ],
+                    {
+                        duration: 300
+                    }
+                );
+
+                return;
+            }
+
+
+            showScreen(
+                "birthdayScreen"
             );
 
-            return;
         }
-
-        showScreen("birthdayScreen");
-
-    });
+    );
 
 }
 
@@ -245,49 +331,58 @@ if (countdownButton) {
    MILESTONE
 ========================================================= */
 
-const ageElement =
-    document.getElementById("birthdayAge");
+const birthdayAge =
+    document.getElementById(
+        "birthdayAge"
+    );
 
-if (ageElement) {
-    ageElement.textContent = "23";
+
+if (birthdayAge) {
+
+    birthdayAge.textContent =
+        "23";
+
 }
 
+
+/*
+   Birth date used for the
+   "days lived" counter.
+*/
 
 const birthDate =
-    new Date("2003-08-26T00:00:00+05:30");
+    new Date(
+        "2003-08-26T00:00:00+05:30"
+    );
 
-const daysLivedElement =
-    document.getElementById("daysLived");
 
-if (daysLivedElement) {
+const daysLived =
+    document.getElementById(
+        "daysLived"
+    );
 
-    const days =
+
+if (daysLived) {
+
+    const lived =
         Math.floor(
-            (new Date() - birthDate) /
-            (1000 * 60 * 60 * 24)
+            (
+                new Date() -
+                birthDate
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            )
         );
 
-    daysLivedElement.textContent =
-        days.toLocaleString();
+
+    daysLived.textContent =
+        lived.toLocaleString();
+
 }
-
-
-/* =========================================================
-   MEMORY PHOTOS
-========================================================= */
-
-const memoryFrames =
-    document.querySelectorAll(".memory-frame");
-
-memoryFrames.forEach(frame => {
-
-    frame.addEventListener("click", () => {
-
-        frame.classList.toggle("selected");
-
-    });
-
-});
 
 
 /* =========================================================
@@ -295,37 +390,58 @@ memoryFrames.forEach(frame => {
 ========================================================= */
 
 const envelope =
-    document.getElementById("envelope");
+    document.getElementById(
+        "envelope"
+    );
+
 
 let envelopeOpened = false;
 
+
 if (envelope) {
 
-    envelope.addEventListener("click", () => {
+    envelope.addEventListener(
+        "click",
+        () => {
 
-        if (envelopeOpened) return;
+            if (envelopeOpened) return;
 
-        envelopeOpened = true;
 
-        envelope.classList.add("open");
+            envelopeOpened = true;
 
-        const tapText =
-            document.querySelector(".tap-text");
 
-        if (tapText) {
+            envelope.classList.add(
+                "open"
+            );
 
-            tapText.textContent =
-                "Your letter is waiting... 💕";
+
+            const tapText =
+                document.querySelector(
+                    ".tap-text"
+                );
+
+
+            if (tapText) {
+
+                tapText.textContent =
+                    "Your letter is waiting... 💕";
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    showScreen(
+                        "letterMessageScreen"
+                    );
+
+                },
+                1800
+            );
 
         }
-
-        setTimeout(() => {
-
-            showScreen("letterMessageScreen");
-
-        }, 1800);
-
-    });
+    );
 
 }
 
@@ -335,19 +451,33 @@ if (envelope) {
 ========================================================= */
 
 const reasonCards =
-    document.querySelectorAll(".reason-card");
+    document.querySelectorAll(
+        ".reason-card"
+    );
+
 
 const reasonCounter =
-    document.getElementById("reasonCounter");
+    document.getElementById(
+        "reasonCounter"
+    );
+
 
 const revealNext =
-    document.getElementById("revealNext");
+    document.getElementById(
+        "revealNext"
+    );
+
 
 const revealAll =
-    document.getElementById("revealAll");
+    document.getElementById(
+        "revealAll"
+    );
+
 
 const reasonsContinue =
-    document.getElementById("reasonsContinue");
+    document.getElementById(
+        "reasonsContinue"
+    );
 
 
 let revealedReasons = 0;
@@ -357,62 +487,41 @@ function updateReasonCounter() {
 
     if (!reasonCounter) return;
 
+
     reasonCounter.textContent =
         `${revealedReasons} / 12 Reasons Revealed ❤️`;
 
 }
 
 
-function finishReasons() {
+function unlockContinueButton() {
 
-    revealedReasons =
-        reasonCards.length;
-
-
-    reasonCards.forEach(card => {
-
-        card.classList.add("revealed");
-
-    });
+    if (!reasonsContinue) return;
 
 
-    updateReasonCounter();
+    reasonsContinue.classList.remove(
+        "hidden-element"
+    );
 
 
-    if (revealNext) {
-
-        revealNext.disabled = true;
-
-        revealNext.textContent =
-            "All Revealed ❤️";
-
-    }
+    reasonsContinue.disabled =
+        false;
 
 
-    if (reasonsContinue) {
-
-        reasonsContinue.classList.remove(
-            "hidden-element"
-        );
-
-        reasonsContinue.disabled = false;
-
-        reasonsContinue.style.display =
-            "inline-block";
-
-    }
+    reasonsContinue.style.display =
+        "inline-block";
 
 }
 
 
-function revealOneReason() {
+function revealReason() {
 
     if (
         revealedReasons >=
         reasonCards.length
     ) {
 
-        finishReasons();
+        unlockContinueButton();
 
         return;
 
@@ -421,7 +530,9 @@ function revealOneReason() {
 
     reasonCards[
         revealedReasons
-    ].classList.add("revealed");
+    ].classList.add(
+        "revealed"
+    );
 
 
     revealedReasons++;
@@ -435,7 +546,18 @@ function revealOneReason() {
         reasonCards.length
     ) {
 
-        finishReasons();
+        if (revealNext) {
+
+            revealNext.disabled =
+                true;
+
+            revealNext.textContent =
+                "All Revealed ❤️";
+
+        }
+
+
+        unlockContinueButton();
 
     }
 
@@ -446,7 +568,7 @@ if (revealNext) {
 
     revealNext.addEventListener(
         "click",
-        revealOneReason
+        revealReason
     );
 
 }
@@ -456,14 +578,47 @@ if (revealAll) {
 
     revealAll.addEventListener(
         "click",
-        finishReasons
+        () => {
+
+            reasonCards.forEach(
+                card => {
+
+                    card.classList.add(
+                        "revealed"
+                    );
+
+                }
+            );
+
+
+            revealedReasons =
+                reasonCards.length;
+
+
+            updateReasonCounter();
+
+
+            if (revealNext) {
+
+                revealNext.disabled =
+                    true;
+
+                revealNext.textContent =
+                    "All Revealed ❤️";
+
+            }
+
+
+            unlockContinueButton();
+
+        }
     );
 
 }
 
 
 /* =========================================================
-   🚨 IMPORTANT:
+   ⭐ THIS IS THE IMPORTANT BUTTON
    12 REASONS → HEART GAME
 ========================================================= */
 
@@ -471,17 +626,36 @@ if (reasonsContinue) {
 
     reasonsContinue.addEventListener(
         "click",
-        function(event) {
+        event => {
 
             event.preventDefault();
 
             event.stopPropagation();
 
+
             console.log(
-                "Opening Heart Game..."
+                "12 Reasons complete → Heart Game"
             );
 
-            showScreen("gameScreen");
+
+            showScreen(
+                "gameScreen"
+            );
+
+
+            /*
+               Start game after screen
+               becomes visible.
+            */
+
+            setTimeout(
+                () => {
+
+                    startHeartGame();
+
+                },
+                100
+            );
 
         }
     );
@@ -497,22 +671,39 @@ updateReasonCounter();
 ========================================================= */
 
 const gameArea =
-    document.getElementById("heartGameArea");
+    document.getElementById(
+        "heartGameArea"
+    );
+
 
 const playerBasket =
-    document.getElementById("playerBasket");
+    document.getElementById(
+        "playerBasket"
+    );
+
 
 const heartScore =
-    document.getElementById("heartScore");
+    document.getElementById(
+        "heartScore"
+    );
+
 
 const gameTimer =
-    document.getElementById("gameTimer");
+    document.getElementById(
+        "gameTimer"
+    );
+
 
 const gameProgress =
-    document.getElementById("gameProgress");
+    document.getElementById(
+        "gameProgress"
+    );
+
 
 const gameResult =
-    document.getElementById("gameResult");
+    document.getElementById(
+        "gameResult"
+    );
 
 
 let score = 0;
@@ -526,7 +717,9 @@ let gameInterval = null;
 let spawnInterval = null;
 
 
-/* Move basket */
+/* -----------------------------------------
+   Move basket
+----------------------------------------- */
 
 function moveBasket(clientX) {
 
@@ -546,13 +739,15 @@ function moveBasket(clientX) {
 
 
     let x =
-        clientX - rect.left;
+        clientX -
+        rect.left;
 
 
     x = Math.max(
         basketWidth / 2,
         Math.min(
-            rect.width - basketWidth / 2,
+            rect.width -
+            basketWidth / 2,
             x
         )
     );
@@ -560,6 +755,7 @@ function moveBasket(clientX) {
 
     playerBasket.style.left =
         x + "px";
+
 }
 
 
@@ -583,10 +779,14 @@ if (gameArea) {
 
             event.preventDefault();
 
-            if (event.touches.length) {
+
+            if (
+                event.touches.length
+            ) {
 
                 moveBasket(
-                    event.touches[0].clientX
+                    event.touches[0]
+                        .clientX
                 );
 
             }
@@ -600,7 +800,9 @@ if (gameArea) {
 }
 
 
-/* Create falling heart */
+/* -----------------------------------------
+   Create falling heart
+----------------------------------------- */
 
 function createGameHeart() {
 
@@ -611,7 +813,9 @@ function createGameHeart() {
 
 
     const heart =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     heart.className =
@@ -619,7 +823,12 @@ function createGameHeart() {
 
 
     heart.textContent =
-        ["❤️", "💗", "💕", "💖"][
+        [
+            "❤️",
+            "💗",
+            "💕",
+            "💖"
+        ][
             Math.floor(
                 Math.random() * 4
             )
@@ -635,97 +844,140 @@ function createGameHeart() {
         "px";
 
 
-    const duration =
-        2 +
-        Math.random() * 1;
+    const fallDuration =
+        2.2 +
+        Math.random() * 1.2;
 
 
     heart.style.animationDuration =
-        duration + "s";
+        fallDuration + "s";
 
 
-    gameArea.appendChild(heart);
+    gameArea.appendChild(
+        heart
+    );
 
 
     const collision =
-        setInterval(() => {
+        setInterval(
+            () => {
+
+                if (
+                    !gameRunning ||
+                    !heart.isConnected
+                ) {
+
+                    clearInterval(
+                        collision
+                    );
+
+                    return;
+
+                }
+
+
+                const heartRect =
+                    heart.getBoundingClientRect();
+
+
+                const basketRect =
+                    playerBasket.getBoundingClientRect();
+
+
+                const caught =
+                    heartRect.bottom >=
+                        basketRect.top &&
+
+                    heartRect.left <
+                        basketRect.right &&
+
+                    heartRect.right >
+                        basketRect.left;
+
+
+                if (caught) {
+
+                    score++;
+
+
+                    if (heartScore) {
+
+                        heartScore.textContent =
+                            score;
+
+                    }
+
+
+                    if (gameProgress) {
+
+                        gameProgress.style.width =
+                            Math.min(
+                                score * 10,
+                                100
+                            ) + "%";
+
+                    }
+
+
+                    heart.remove();
+
+
+                    clearInterval(
+                        collision
+                    );
+
+                }
+
+            },
+            50
+        );
+
+
+    setTimeout(
+        () => {
+
+            clearInterval(
+                collision
+            );
+
 
             if (
-                !gameRunning ||
-                !heart.isConnected
+                heart.isConnected
             ) {
-
-                clearInterval(collision);
-
-                return;
-            }
-
-
-            const heartRect =
-                heart.getBoundingClientRect();
-
-            const basketRect =
-                playerBasket.getBoundingClientRect();
-
-
-            const caught =
-                heartRect.bottom >=
-                    basketRect.top &&
-
-                heartRect.left <
-                    basketRect.right &&
-
-                heartRect.right >
-                    basketRect.left;
-
-
-            if (caught) {
-
-                score++;
-
-                heartScore.textContent =
-                    score;
-
-
-                gameProgress.style.width =
-                    Math.min(
-                        score * 10,
-                        100
-                    ) + "%";
-
 
                 heart.remove();
 
-                clearInterval(collision);
-
             }
 
-        }, 50);
-
-
-    setTimeout(() => {
-
-        clearInterval(collision);
-
-        if (heart.isConnected) {
-            heart.remove();
-        }
-
-    }, (duration + 0.5) * 1000);
+        },
+        (
+            fallDuration +
+            0.5
+        ) * 1000
+    );
 
 }
 
 
-/* Start game */
+/* -----------------------------------------
+   Start game
+----------------------------------------- */
 
 function startHeartGame() {
 
-    if (!gameArea) return;
+    if (
+        !gameArea ||
+        !playerBasket
+    ) return;
 
 
-    clearInterval(gameInterval);
+    clearInterval(
+        gameInterval
+    );
 
-    clearInterval(spawnInterval);
+    clearInterval(
+        spawnInterval
+    );
 
 
     score = 0;
@@ -735,18 +987,37 @@ function startHeartGame() {
     gameRunning = true;
 
 
-    heartScore.textContent = "0";
+    if (heartScore) {
 
-    gameTimer.textContent =
-        gameTime;
+        heartScore.textContent =
+            "0";
 
-    gameProgress.style.width =
-        "0%";
+    }
 
 
-    gameResult.classList.add(
-        "hidden-element"
-    );
+    if (gameTimer) {
+
+        gameTimer.textContent =
+            gameTime;
+
+    }
+
+
+    if (gameProgress) {
+
+        gameProgress.style.width =
+            "0%";
+
+    }
+
+
+    if (gameResult) {
+
+        gameResult.classList.add(
+            "hidden-element"
+        );
+
+    }
 
 
     playerBasket.style.left =
@@ -761,26 +1032,51 @@ function startHeartGame() {
 
 
     gameInterval =
-        setInterval(() => {
+        setInterval(
+            () => {
 
-            gameTime--;
-
-            gameTimer.textContent =
-                gameTime;
+                gameTime--;
 
 
-            if (gameTime <= 0) {
+                if (gameTimer) {
 
-                endHeartGame();
+                    gameTimer.textContent =
+                        gameTime;
 
-            }
+                }
 
-        }, 1000);
+
+                if (gameProgress) {
+
+                    gameProgress.style.width =
+                        (
+                            (
+                                6 -
+                                gameTime
+                            ) / 6 * 100
+                        ) + "%";
+
+                }
+
+
+                if (
+                    gameTime <= 0
+                ) {
+
+                    endHeartGame();
+
+                }
+
+            },
+            1000
+        );
 
 }
 
 
-/* End game */
+/* -----------------------------------------
+   End game
+----------------------------------------- */
 
 function endHeartGame() {
 
@@ -790,21 +1086,34 @@ function endHeartGame() {
     gameRunning = false;
 
 
-    clearInterval(gameInterval);
+    clearInterval(
+        gameInterval
+    );
 
-    clearInterval(spawnInterval);
-
-
-    gameResult.classList.remove(
-        "hidden-element"
+    clearInterval(
+        spawnInterval
     );
 
 
-    setTimeout(() => {
+    if (gameResult) {
 
-        showScreen("cakeScreen");
+        gameResult.classList.remove(
+            "hidden-element"
+        );
 
-    }, 1800);
+    }
+
+
+    setTimeout(
+        () => {
+
+            showScreen(
+                "cakeScreen"
+            );
+
+        },
+        1800
+    );
 
 }
 
@@ -814,222 +1123,289 @@ function endHeartGame() {
 ========================================================= */
 
 const cakeTabs =
-    document.querySelectorAll(".cake-tab");
+    document.querySelectorAll(
+        ".cake-tab"
+    );
+
 
 const cakePanels =
-    document.querySelectorAll(".cake-panel");
+    document.querySelectorAll(
+        ".cake-panel"
+    );
 
 
-cakeTabs.forEach(tab => {
+cakeTabs.forEach(
+    tab => {
 
-    tab.addEventListener("click", () => {
+        tab.addEventListener(
+            "click",
+            () => {
 
-        const target =
-            tab.dataset.tab;
+                const target =
+                    tab.dataset.tab;
 
 
-        cakeTabs.forEach(item =>
-            item.classList.remove("active")
+                cakeTabs.forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                cakePanels.forEach(
+                    panel => {
+
+                        panel.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                tab.classList.add(
+                    "active"
+                );
+
+
+                const panel =
+                    document.querySelector(
+                        `[data-panel="${target}"]`
+                    );
+
+
+                if (panel) {
+
+                    panel.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
         );
 
-
-        cakePanels.forEach(panel =>
-            panel.classList.remove("active")
-        );
+    }
+);
 
 
-        tab.classList.add("active");
-
-
-        const panel =
-            document.querySelector(
-                `[data-panel="${target}"]`
-            );
-
-
-        if (panel) {
-
-            panel.classList.add("active");
-
-        }
-
-    });
-
-});
-
-
-/* Cake flavor */
+/* -----------------------------------------
+   Cake flavor
+----------------------------------------- */
 
 const cakeLayers =
-    document.querySelectorAll(".cake-layer");
+    document.querySelectorAll(
+        ".cake-layer"
+    );
 
 
 const flavorColors = {
 
-    chocolate: "#70452f",
+    chocolate:
+        "#70452f",
 
-    vanilla: "#f4d9a5",
+    vanilla:
+        "#f4d9a5",
 
-    strawberry: "#e995a9",
+    strawberry:
+        "#e995a9",
 
-    redvelvet: "#a83b49"
+    redvelvet:
+        "#a83b49"
 
 };
 
 
 document
-    .querySelectorAll("[data-flavor]")
-    .forEach(button => {
+    .querySelectorAll(
+        "[data-flavor]"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(
-                        "[data-flavor]"
-                    )
-                    .forEach(item =>
-                        item.classList.remove(
-                            "selected"
+                    document
+                        .querySelectorAll(
+                            "[data-flavor]"
                         )
+                        .forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
                     );
 
 
-                button.classList.add(
-                    "selected"
-                );
+                    cakeLayers.forEach(
+                        layer => {
+
+                            layer.style.background =
+                                flavorColors[
+                                    button.dataset.flavor
+                                ];
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
 
 
-                cakeLayers.forEach(
-                    layer => {
+/* -----------------------------------------
+   Cake layers
+----------------------------------------- */
 
-                        layer.style.background =
-                            flavorColors[
-                                button.dataset.flavor
-                            ];
+document
+    .querySelectorAll(
+        "[data-layers]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            "[data-layers]"
+                        )
+                        .forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+
+                    const layers =
+                        Number(
+                            button.dataset.layers
+                        );
+
+
+                    const layerThree =
+                        document.querySelector(
+                            ".layer-three"
+                        );
+
+
+                    const layerFour =
+                        document.querySelector(
+                            ".layer-four"
+                        );
+
+
+                    if (layerThree) {
+
+                        layerThree.style.display =
+                            layers >= 3
+                                ? "block"
+                                : "none";
 
                     }
-                );
-
-            }
-        );
-
-    });
 
 
-/* Layers */
+                    if (layerFour) {
 
-document
-    .querySelectorAll("[data-layers]")
-    .forEach(button => {
+                        layerFour.style.display =
+                            layers >= 4
+                                ? "block"
+                                : "none";
 
-        button.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        "[data-layers]"
-                    )
-                    .forEach(item =>
-                        item.classList.remove(
-                            "selected"
-                        )
-                    );
-
-
-                button.classList.add(
-                    "selected"
-                );
-
-
-                const number =
-                    Number(
-                        button.dataset.layers
-                    );
-
-
-                const three =
-                    document.querySelector(
-                        ".layer-three"
-                    );
-
-                const four =
-                    document.querySelector(
-                        ".layer-four"
-                    );
-
-
-                if (three) {
-
-                    three.style.display =
-                        number >= 3
-                            ? "block"
-                            : "none";
+                    }
 
                 }
+            );
+
+        }
+    );
 
 
-                if (four) {
-
-                    four.style.display =
-                        number >= 4
-                            ? "block"
-                            : "none";
-
-                }
-
-            }
-        );
-
-    });
-
-
-/* Frosting */
+/* -----------------------------------------
+   Frosting
+----------------------------------------- */
 
 const cakeTop =
-    document.getElementById("cakeTop");
+    document.getElementById(
+        "cakeTop"
+    );
 
 
 document
-    .querySelectorAll("[data-frosting]")
-    .forEach(button => {
+    .querySelectorAll(
+        "[data-frosting]"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(
-                        "[data-frosting]"
-                    )
-                    .forEach(item =>
-                        item.classList.remove(
-                            "selected"
+                    document
+                        .querySelectorAll(
+                            "[data-frosting]"
                         )
+                        .forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
                     );
 
 
-                button.classList.add(
-                    "selected"
-                );
+                    if (cakeTop) {
 
+                        cakeTop.style.background =
+                            button.dataset.frosting;
 
-                if (cakeTop) {
-
-                    cakeTop.style.background =
-                        button.dataset.frosting;
+                    }
 
                 }
+            );
 
-            }
-        );
-
-    });
+        }
+    );
 
 
-/* Decorations */
+/* -----------------------------------------
+   Decorations
+----------------------------------------- */
 
 const cakeDecoration =
     document.getElementById(
@@ -1039,54 +1415,66 @@ const cakeDecoration =
 
 const decorations = {
 
-    flowers: "🌸",
+    flowers:
+        "🌸",
 
-    sprinkles: "🌈",
+    sprinkles:
+        "🌈",
 
-    hearts: "❤️",
+    hearts:
+        "❤️",
 
-    none: ""
+    none:
+        ""
 
 };
 
 
 document
-    .querySelectorAll("[data-decor]")
-    .forEach(button => {
+    .querySelectorAll(
+        "[data-decor]"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(
-                        "[data-decor]"
-                    )
-                    .forEach(item =>
-                        item.classList.remove(
-                            "selected"
+                    document
+                        .querySelectorAll(
+                            "[data-decor]"
                         )
+                        .forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
                     );
 
 
-                button.classList.add(
-                    "selected"
-                );
+                    if (cakeDecoration) {
 
+                        cakeDecoration.textContent =
+                            decorations[
+                                button.dataset.decor
+                            ];
 
-                if (cakeDecoration) {
-
-                    cakeDecoration.textContent =
-                        decorations[
-                            button.dataset.decor
-                        ];
+                    }
 
                 }
+            );
 
-            }
-        );
-
-    });
+        }
+    );
 
 
 /* =========================================================
@@ -1098,20 +1486,24 @@ const cakeCandles =
         "cakeCandles"
     );
 
+
 const candleCount =
     document.getElementById(
         "candleCount"
     );
+
 
 const addCandle =
     document.getElementById(
         "addCandle"
     );
 
+
 const removeCandles =
     document.getElementById(
         "removeCandles"
     );
+
 
 const blowCandles =
     document.getElementById(
@@ -1128,7 +1520,9 @@ if (addCandle) {
         "click",
         () => {
 
-            if (candles >= 10) return;
+            if (
+                candles >= 10
+            ) return;
 
 
             candles++;
@@ -1184,7 +1578,9 @@ if (blowCandles) {
         "click",
         () => {
 
-            if (candles === 0) {
+            if (
+                candles === 0
+            ) {
 
                 alert(
                     "Add some candles first! 🕯️"
@@ -1199,10 +1595,17 @@ if (blowCandles) {
                 .querySelectorAll(
                     ".cake-candle"
                 )
-                .forEach(candle =>
-                    candle.classList.add(
-                        "blown"
-                    )
+                .forEach(
+                    candle => {
+
+                        candle.classList.add(
+                            "blown"
+                        );
+
+                        candle.style.opacity =
+                            ".6";
+
+                    }
                 );
 
 
@@ -1214,7 +1617,9 @@ if (blowCandles) {
 }
 
 
-/* Cake Done */
+/* =========================================================
+   CAKE DONE
+========================================================= */
 
 const cakeDone =
     document.getElementById(
@@ -1230,6 +1635,7 @@ if (cakeDone) {
 
             createConfetti();
 
+
             setTimeout(
                 () => {
 
@@ -1238,7 +1644,7 @@ if (cakeDone) {
                     );
 
                 },
-                700
+                900
             );
 
         }
@@ -1253,14 +1659,6 @@ if (cakeDone) {
 
 function createConfetti() {
 
-    const symbols = [
-        "❤️",
-        "💕",
-        "✨",
-        "🎀"
-    ];
-
-
     for (
         let i = 0;
         i < 35;
@@ -1274,10 +1672,14 @@ function createConfetti() {
 
 
         piece.textContent =
-            symbols[
+            [
+                "❤️",
+                "💕",
+                "✨",
+                "🎀"
+            ][
                 Math.floor(
-                    Math.random() *
-                    symbols.length
+                    Math.random() * 4
                 )
             ];
 
@@ -1285,21 +1687,30 @@ function createConfetti() {
         piece.style.position =
             "fixed";
 
+
         piece.style.left =
-            Math.random() * 100 + "vw";
+            Math.random() * 100 +
+            "vw";
+
 
         piece.style.top =
             "-30px";
 
+
         piece.style.fontSize =
-            (15 + Math.random() * 20) +
-            "px";
+            (
+                15 +
+                Math.random() * 20
+            ) + "px";
+
 
         piece.style.zIndex =
             "999";
 
+
         piece.style.pointerEvents =
             "none";
+
 
         piece.style.transition =
             "transform 2s ease, opacity 2s ease";
@@ -1310,24 +1721,31 @@ function createConfetti() {
         );
 
 
-        requestAnimationFrame(() => {
+        requestAnimationFrame(
+            () => {
 
-            piece.style.transform =
-                `translateY(
-                    ${window.innerHeight + 100}px
-                )
-                rotate(
-                    ${Math.random() * 720}deg
-                )`;
+                piece.style.transform =
+                    `translateY(
+                        ${window.innerHeight + 100}px
+                    )
+                    rotate(
+                        ${Math.random() * 720}deg
+                    )`;
 
-            piece.style.opacity =
-                "0";
 
-        });
+                piece.style.opacity =
+                    "0";
+
+            }
+        );
 
 
         setTimeout(
-            () => piece.remove(),
+            () => {
+
+                piece.remove();
+
+            },
             2200
         );
 
@@ -1345,15 +1763,18 @@ const loveCards =
         ".love-card"
     );
 
+
 const loveMessage =
     document.getElementById(
         "loveMessage"
     );
 
+
 const loveMessageText =
     document.getElementById(
         "loveMessageText"
     );
+
 
 const closeLoveMessage =
     document.getElementById(
@@ -1361,32 +1782,34 @@ const closeLoveMessage =
     );
 
 
-loveCards.forEach(card => {
+loveCards.forEach(
+    card => {
 
-    card.addEventListener(
-        "click",
-        () => {
+        card.addEventListener(
+            "click",
+            () => {
 
-            if (loveMessageText) {
+                if (loveMessageText) {
 
-                loveMessageText.textContent =
-                    card.dataset.message;
+                    loveMessageText.textContent =
+                        card.dataset.message;
+
+                }
+
+
+                if (loveMessage) {
+
+                    loveMessage.classList.remove(
+                        "hidden-element"
+                    );
+
+                }
 
             }
+        );
 
-
-            if (loveMessage) {
-
-                loveMessage.classList.remove(
-                    "hidden-element"
-                );
-
-            }
-
-        }
-    );
-
-});
+    }
+);
 
 
 if (closeLoveMessage) {
@@ -1426,6 +1849,7 @@ if (finalButton) {
         () => {
 
             createConfetti();
+
 
             setTimeout(
                 () => {
@@ -1469,14 +1893,14 @@ if (replayButton) {
 
 
 /* =========================================================
-   DONE
+   READY
 ========================================================= */
 
 console.log(
-    "❤️ Fatema Birthday Website Loaded!"
+    "❤️ Fatema Birthday Website Loaded"
 );
 
 console.log(
-    "Birthday:",
+    "Birthday unlock time:",
     birthday
 );
