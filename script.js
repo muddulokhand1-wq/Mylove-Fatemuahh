@@ -7,38 +7,34 @@
    FLOATING HEARTS
 ========================================================= */
 
-const heartsContainer = document.querySelector(".hearts");
+const hearts = document.querySelector(".hearts");
 
-function createFloatingHeart() {
+function createHeart() {
 
-    if (!heartsContainer) return;
+    if (!hearts) return;
 
     const heart = document.createElement("div");
 
     heart.className = "heart";
 
-    heart.innerHTML =
-        ["❤", "♡", "💕", "♥"][
-            Math.floor(Math.random() * 4)
-        ];
+    heart.innerHTML = ["❤", "♡", "💕", "♥"][
+        Math.floor(Math.random() * 4)
+    ];
 
-    heart.style.left =
-        Math.random() * 100 + "vw";
+    heart.style.left = Math.random() * 100 + "vw";
 
     heart.style.fontSize =
-        (14 + Math.random() * 22) + "px";
+        (15 + Math.random() * 25) + "px";
 
     heart.style.animationDuration =
-        (6 + Math.random() * 5) + "s";
+        (6 + Math.random() * 4) + "s";
 
-    heartsContainer.appendChild(heart);
+    hearts.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 12000);
+    setTimeout(() => heart.remove(), 10000);
 }
 
-setInterval(createFloatingHeart, 450);
+setInterval(createHeart, 350);
 
 
 /* =========================================================
@@ -47,71 +43,66 @@ setInterval(createFloatingHeart, 450);
 
 const screens = document.querySelectorAll(".screen");
 
-let currentScreen = "countdownScreen";
+function showScreen(id) {
 
-function showScreen(screenId) {
-
-    const target = document.getElementById(screenId);
+    const target = document.getElementById(id);
 
     if (!target) {
-        console.error("Screen not found:", screenId);
+        console.error("Screen not found:", id);
         return;
     }
 
     screens.forEach(screen => {
-
         screen.classList.remove("active-screen");
-
         screen.classList.add("hidden-screen");
-
     });
 
     target.classList.remove("hidden-screen");
-
     target.classList.add("active-screen");
-
-    currentScreen = screenId;
 
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 
-
-    if (screenId === "gameScreen") {
+    if (id === "gameScreen") {
         startHeartGame();
     }
-
-    if (screenId === "reasonsScreen") {
-        resetReasons();
-    }
-
 }
 
 
 /* =========================================================
-   NEXT BUTTONS
+   GENERIC NEXT BUTTONS
 ========================================================= */
 
-document
-    .querySelectorAll("[data-next]")
-    .forEach(button => {
+document.querySelectorAll("[data-next]").forEach(button => {
 
-        button.addEventListener("click", () => {
+    button.addEventListener("click", () => {
 
-            const nextScreen =
-                button.dataset.next;
-
-            showScreen(nextScreen);
-
-        });
+        showScreen(button.dataset.next);
 
     });
 
+});
+
 
 /* =========================================================
-   🔒 BIRTHDAY COUNTDOWN + LOCK
+   🔒 BIRTHDAY COUNTDOWN
 ========================================================= */
+
+/*
+   TEMPORARY TEST DATE
+   --------------------------------
+   23 August 2026 — 8:30 PM IST
+
+   AFTER TESTING CHANGE THIS BACK TO:
+
+   new Date("2026-08-26T14:57:00+05:30")
+*/
+
+const birthday =
+    new Date("2026-08-23T20:30:00+05:30");
+
 
 const countdown =
     document.getElementById("countdown");
@@ -120,19 +111,7 @@ const countdownButton =
     document.getElementById("countdownButton");
 
 
-/*
-    BIRTHDAY:
-    26 AUGUST 2026
-    2:57 PM IST
-
-    The +05:30 forces Indian Standard Time.
-*/
-
-const birthday =
-    new Date("2026-08-23T20:30:00+05:30");
-
-
-function isBirthdayUnlocked() {
+function birthdayUnlocked() {
 
     return new Date() >= birthday;
 
@@ -141,17 +120,16 @@ function isBirthdayUnlocked() {
 
 function updateCountdown() {
 
+    if (!countdown || !countdownButton) return;
+
     const now = new Date();
 
-    const difference =
-        birthday - now;
+    const diff = birthday - now;
 
 
-    /* -----------------------------------------
-       🎉 BIRTHDAY HAS ARRIVED
-    ----------------------------------------- */
+    /* BIRTHDAY ARRIVED */
 
-    if (difference <= 0) {
+    if (diff <= 0) {
 
         countdown.innerHTML =
             "🎉 Happy Birthday Fatema ❤️";
@@ -159,46 +137,32 @@ function updateCountdown() {
         countdownButton.innerHTML =
             "💌 Open Your Surprise ❤️";
 
-        countdownButton.disabled =
-            false;
+        countdownButton.disabled = false;
 
         return;
-
     }
 
 
-    /* -----------------------------------------
-       🔒 STILL LOCKED
-    ----------------------------------------- */
+    /* STILL LOCKED */
 
     const days =
         Math.floor(
-            difference /
-            1000 /
-            60 /
-            60 /
-            24
+            diff / 1000 / 60 / 60 / 24
         );
 
     const hours =
         Math.floor(
-            difference /
-            1000 /
-            60 /
-            60
+            diff / 1000 / 60 / 60
         ) % 24;
 
     const minutes =
         Math.floor(
-            difference /
-            1000 /
-            60
+            diff / 1000 / 60
         ) % 60;
 
     const seconds =
         Math.floor(
-            difference /
-            1000
+            diff / 1000
         ) % 60;
 
 
@@ -234,236 +198,96 @@ function updateCountdown() {
     countdownButton.innerHTML =
         "🔒 Opens on 26 August 2026 🎂";
 
-    countdownButton.disabled =
-        true;
-
+    countdownButton.disabled = true;
 }
 
 
 updateCountdown();
 
-setInterval(
-    updateCountdown,
-    1000
-);
+setInterval(updateCountdown, 1000);
 
 
-/* -----------------------------------------
-   OPEN SURPRISE BUTTON
------------------------------------------ */
+/* =========================================================
+   COUNTDOWN BUTTON
+========================================================= */
 
 if (countdownButton) {
 
-    countdownButton.addEventListener(
-        "click",
-        () => {
+    countdownButton.addEventListener("click", event => {
 
-            /*
-                ALWAYS check the real time.
+        event.preventDefault();
 
-                Before:
-                → Nothing happens.
+        if (!birthdayUnlocked()) {
 
-                After:
-                → Opens birthday screen.
-            */
+            countdownButton.animate(
+                [
+                    { transform: "translateX(0)" },
+                    { transform: "translateX(-6px)" },
+                    { transform: "translateX(6px)" },
+                    { transform: "translateX(0)" }
+                ],
+                {
+                    duration: 300
+                }
+            );
 
-            if (!isBirthdayUnlocked()) {
-
-                countdownButton.animate(
-
-                    [
-                        {
-                            transform: "translateX(0)"
-                        },
-                        {
-                            transform: "translateX(-6px)"
-                        },
-                        {
-                            transform: "translateX(6px)"
-                        },
-                        {
-                            transform: "translateX(0)"
-                        }
-                    ],
-
-                    {
-                        duration: 300
-                    }
-
-                );
-
-                return;
-
-            }
-
-
-            showScreen("birthdayScreen");
-
+            return;
         }
-    );
+
+        showScreen("birthdayScreen");
+
+    });
 
 }
 
 
 /* =========================================================
-   MILESTONE — DAYS LIVED
+   MILESTONE
 ========================================================= */
+
+const ageElement =
+    document.getElementById("birthdayAge");
+
+if (ageElement) {
+    ageElement.textContent = "23";
+}
+
 
 const birthDate =
     new Date("2003-08-26T00:00:00+05:30");
 
+const daysLivedElement =
+    document.getElementById("daysLived");
 
-function updateDaysLived() {
-
-    const daysLivedElement =
-        document.getElementById("daysLived");
-
-    if (!daysLivedElement) return;
-
-
-    const today =
-        new Date();
-
-
-    const difference =
-        today - birthDate;
-
+if (daysLivedElement) {
 
     const days =
         Math.floor(
-            difference /
+            (new Date() - birthDate) /
             (1000 * 60 * 60 * 24)
         );
 
-
     daysLivedElement.textContent =
         days.toLocaleString();
-
 }
-
-
-updateDaysLived();
 
 
 /* =========================================================
-   MEMORY GALLERY
+   MEMORY PHOTOS
 ========================================================= */
 
-const memoryPhotos =
-    document.querySelectorAll(".memory-photo");
+const memoryFrames =
+    document.querySelectorAll(".memory-frame");
 
-const memoryDots =
-    document.querySelectorAll("#memoryDots span");
+memoryFrames.forEach(frame => {
 
-const memoryPrev =
-    document.getElementById("memoryPrev");
+    frame.addEventListener("click", () => {
 
-const memoryNext =
-    document.getElementById("memoryNext");
+        frame.classList.toggle("selected");
 
+    });
 
-let currentMemory = 0;
-
-
-function showMemory(index) {
-
-    if (memoryPhotos.length === 0) return;
-
-
-    if (index < 0) {
-
-        index =
-            memoryPhotos.length - 1;
-
-    }
-
-
-    if (index >= memoryPhotos.length) {
-
-        index = 0;
-
-    }
-
-
-    currentMemory = index;
-
-
-    memoryPhotos.forEach(
-        (photo, i) => {
-
-            photo.classList.toggle(
-                "active-memory",
-                i === currentMemory
-            );
-
-        }
-    );
-
-
-    memoryDots.forEach(
-        (dot, i) => {
-
-            dot.classList.toggle(
-                "active-dot",
-                i === currentMemory
-            );
-
-        }
-    );
-
-}
-
-
-if (memoryNext) {
-
-    memoryNext.addEventListener(
-        "click",
-        () => {
-
-            showMemory(
-                currentMemory + 1
-            );
-
-        }
-    );
-
-}
-
-
-if (memoryPrev) {
-
-    memoryPrev.addEventListener(
-        "click",
-        () => {
-
-            showMemory(
-                currentMemory - 1
-            );
-
-        }
-    );
-
-}
-
-
-memoryDots.forEach(
-    (dot, index) => {
-
-        dot.addEventListener(
-            "click",
-            () => {
-
-                showMemory(index);
-
-            }
-        );
-
-    }
-);
-
-
-showMemory(0);
+});
 
 
 /* =========================================================
@@ -473,56 +297,41 @@ showMemory(0);
 const envelope =
     document.getElementById("envelope");
 
-
 let envelopeOpened = false;
-
 
 if (envelope) {
 
-    envelope.addEventListener(
-        "click",
-        () => {
+    envelope.addEventListener("click", () => {
 
-            if (envelopeOpened) return;
+        if (envelopeOpened) return;
 
+        envelopeOpened = true;
 
-            envelopeOpened = true;
+        envelope.classList.add("open");
 
+        const tapText =
+            document.querySelector(".tap-text");
 
-            envelope.classList.add("open");
+        if (tapText) {
 
-
-            const tapText =
-                document.querySelector(".tap-text");
-
-
-            if (tapText) {
-
-                tapText.textContent =
-                    "Opening something from my heart... ❤️";
-
-            }
-
-
-            setTimeout(
-                () => {
-
-                    showScreen(
-                        "letterMessageScreen"
-                    );
-
-                },
-                1500
-            );
+            tapText.textContent =
+                "Your letter is waiting... 💕";
 
         }
-    );
+
+        setTimeout(() => {
+
+            showScreen("letterMessageScreen");
+
+        }, 1800);
+
+    });
 
 }
 
 
 /* =========================================================
-   12 REASONS
+   ❤️ 12 REASONS
 ========================================================= */
 
 const reasonCards =
@@ -531,133 +340,146 @@ const reasonCards =
 const reasonCounter =
     document.getElementById("reasonCounter");
 
-const reasonProgressFill =
-    document.getElementById(
-        "reasonProgressFill"
-    );
+const revealNext =
+    document.getElementById("revealNext");
+
+const revealAll =
+    document.getElementById("revealAll");
 
 const reasonsContinue =
-    document.getElementById(
-        "reasonsContinue"
-    );
+    document.getElementById("reasonsContinue");
 
 
 let revealedReasons = 0;
 
 
-function updateReasonProgress() {
+function updateReasonCounter() {
 
-    const total =
+    if (!reasonCounter) return;
+
+    reasonCounter.textContent =
+        `${revealedReasons} / 12 Reasons Revealed ❤️`;
+
+}
+
+
+function finishReasons() {
+
+    revealedReasons =
         reasonCards.length;
 
 
-    if (reasonCounter) {
+    reasonCards.forEach(card => {
 
-        reasonCounter.textContent =
-            `${revealedReasons} / ${total}`;
+        card.classList.add("revealed");
 
-    }
-
-
-    if (reasonProgressFill) {
-
-        const percentage =
-            total === 0
-                ? 0
-                : (
-                    revealedReasons /
-                    total
-                ) * 100;
+    });
 
 
-        reasonProgressFill.style.width =
-            percentage + "%";
+    updateReasonCounter();
+
+
+    if (revealNext) {
+
+        revealNext.disabled = true;
+
+        revealNext.textContent =
+            "All Revealed ❤️";
 
     }
 
 
-    if (
-        revealedReasons >= total &&
-        total > 0
-    ) {
+    if (reasonsContinue) {
 
-        if (reasonsContinue) {
+        reasonsContinue.classList.remove(
+            "hidden-element"
+        );
 
-            reasonsContinue.classList.remove(
-                "hidden-element"
-            );
+        reasonsContinue.disabled = false;
 
-        }
+        reasonsContinue.style.display =
+            "inline-block";
 
     }
 
 }
 
 
-function revealReason(card) {
+function revealOneReason() {
 
     if (
-        card.classList.contains("revealed")
+        revealedReasons >=
+        reasonCards.length
     ) {
+
+        finishReasons();
 
         return;
 
     }
 
 
-    card.classList.add("revealed");
+    reasonCards[
+        revealedReasons
+    ].classList.add("revealed");
 
 
     revealedReasons++;
 
 
-    updateReasonProgress();
+    updateReasonCounter();
 
 
-    createTinyHeart(card);
+    if (
+        revealedReasons >=
+        reasonCards.length
+    ) {
+
+        finishReasons();
+
+    }
 
 }
 
 
-reasonCards.forEach(
-    card => {
+if (revealNext) {
 
-        card.addEventListener(
-            "click",
-            () => {
-
-                revealReason(card);
-
-            }
-        );
-
-    }
-);
-
-
-function resetReasons() {
-
-    revealedReasons = 0;
-
-
-    reasonCards.forEach(
-        card => {
-
-            card.classList.remove(
-                "revealed"
-            );
-
-        }
+    revealNext.addEventListener(
+        "click",
+        revealOneReason
     );
+
+}
+
+
+if (revealAll) {
+
+    revealAll.addEventListener(
+        "click",
+        finishReasons
+    );
+
+}
+
+
 /* =========================================================
-   REASONS → HEART GAME
+   🚨 IMPORTANT:
+   12 REASONS → HEART GAME
 ========================================================= */
 
 if (reasonsContinue) {
 
     reasonsContinue.addEventListener(
         "click",
-        () => {
+        function(event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            console.log(
+                "Opening Heart Game..."
+            );
 
             showScreen("gameScreen");
 
@@ -666,61 +488,8 @@ if (reasonsContinue) {
 
 }
 
-    if (reasonsContinue) {
 
-        reasonsContinue.classList.add(
-            "hidden-element"
-        );
-
-    }
-
-
-    updateReasonProgress();
-
-}
-
-
-function createTinyHeart(element) {
-
-    const heart =
-        document.createElement("span");
-
-
-    heart.textContent = "❤️";
-
-
-    heart.style.position =
-        "absolute";
-
-    heart.style.right =
-        "20px";
-
-    heart.style.bottom =
-        "15px";
-
-    heart.style.fontSize =
-        "16px";
-
-    heart.style.pointerEvents =
-        "none";
-
-    heart.style.animation =
-        "reasonHeartPop .7s ease forwards";
-
-
-    element.appendChild(heart);
-
-
-    setTimeout(
-        () => {
-
-            heart.remove();
-
-        },
-        800
-    );
-
-}
+updateReasonCounter();
 
 
 /* =========================================================
@@ -728,46 +497,36 @@ function createTinyHeart(element) {
 ========================================================= */
 
 const gameArea =
-    document.getElementById(
-        "heartGameArea"
-    );
+    document.getElementById("heartGameArea");
 
 const playerBasket =
-    document.getElementById(
-        "playerBasket"
-    );
+    document.getElementById("playerBasket");
 
 const heartScore =
-    document.getElementById(
-        "heartScore"
-    );
+    document.getElementById("heartScore");
 
 const gameTimer =
-    document.getElementById(
-        "gameTimer"
-    );
+    document.getElementById("gameTimer");
 
 const gameProgress =
-    document.getElementById(
-        "gameProgress"
-    );
+    document.getElementById("gameProgress");
 
 const gameResult =
-    document.getElementById(
-        "gameResult"
-    );
+    document.getElementById("gameResult");
 
 
 let score = 0;
 
-let gameTime = 30;
+let gameTime = 6;
 
 let gameRunning = false;
 
-let gameTimerInterval = null;
+let gameInterval = null;
 
-let heartSpawnInterval = null;
+let spawnInterval = null;
 
+
+/* Move basket */
 
 function moveBasket(clientX) {
 
@@ -775,31 +534,25 @@ function moveBasket(clientX) {
         !gameRunning ||
         !gameArea ||
         !playerBasket
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     const rect =
         gameArea.getBoundingClientRect();
 
 
-    let x =
-        clientX -
-        rect.left;
-
-
     const basketWidth =
         playerBasket.offsetWidth;
+
+
+    let x =
+        clientX - rect.left;
 
 
     x = Math.max(
         basketWidth / 2,
         Math.min(
-            rect.width -
-            basketWidth / 2,
+            rect.width - basketWidth / 2,
             x
         )
     );
@@ -807,7 +560,6 @@ function moveBasket(clientX) {
 
     playerBasket.style.left =
         x + "px";
-
 }
 
 
@@ -831,7 +583,6 @@ if (gameArea) {
 
             event.preventDefault();
 
-
             if (event.touches.length) {
 
                 moveBasket(
@@ -849,16 +600,14 @@ if (gameArea) {
 }
 
 
+/* Create falling heart */
+
 function createGameHeart() {
 
     if (
         !gameRunning ||
         !gameArea
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     const heart =
@@ -870,255 +619,170 @@ function createGameHeart() {
 
 
     heart.textContent =
-        [
-            "❤️",
-            "💗",
-            "💕",
-            "💖"
-        ][
+        ["❤️", "💗", "💕", "💖"][
             Math.floor(
                 Math.random() * 4
             )
         ];
 
 
-    const maxLeft =
-        Math.max(
-            0,
-            gameArea.clientWidth - 35
-        );
-
-
     heart.style.left =
         Math.random() *
-        maxLeft +
+        Math.max(
+            1,
+            gameArea.clientWidth - 35
+        ) +
         "px";
 
 
-    const fallDuration =
-        1.8 +
-        Math.random() * 1.2;
+    const duration =
+        2 +
+        Math.random() * 1;
 
 
     heart.style.animationDuration =
-        fallDuration + "s";
+        duration + "s";
 
 
     gameArea.appendChild(heart);
 
 
-    const collisionInterval =
-        setInterval(
-            () => {
+    const collision =
+        setInterval(() => {
 
-                if (!gameRunning) {
+            if (
+                !gameRunning ||
+                !heart.isConnected
+            ) {
 
-                    clearInterval(
-                        collisionInterval
-                    );
+                clearInterval(collision);
 
-                    return;
-
-                }
-
-
-                if (!heart.isConnected) {
-
-                    clearInterval(
-                        collisionInterval
-                    );
-
-                    return;
-
-                }
+                return;
+            }
 
 
-                const heartRect =
-                    heart.getBoundingClientRect();
+            const heartRect =
+                heart.getBoundingClientRect();
+
+            const basketRect =
+                playerBasket.getBoundingClientRect();
 
 
-                const basketRect =
-                    playerBasket.getBoundingClientRect();
+            const caught =
+                heartRect.bottom >=
+                    basketRect.top &&
+
+                heartRect.left <
+                    basketRect.right &&
+
+                heartRect.right >
+                    basketRect.left;
 
 
-                const caught =
-                    heartRect.bottom >=
-                        basketRect.top &&
+            if (caught) {
 
-                    heartRect.left <
-                        basketRect.right &&
+                score++;
 
-                    heartRect.right >
-                        basketRect.left &&
-
-                    heartRect.top <
-                        basketRect.bottom;
+                heartScore.textContent =
+                    score;
 
 
-                if (caught) {
+                gameProgress.style.width =
+                    Math.min(
+                        score * 10,
+                        100
+                    ) + "%";
 
-                    score++;
-
-
-                    heartScore.textContent =
-                        score;
-
-
-                    updateGameProgress();
-
-
-                    heart.remove();
-
-
-                    clearInterval(
-                        collisionInterval
-                    );
-
-
-                    if (score >= 10) {
-
-                        endHeartGame(true);
-
-                    }
-
-                }
-
-            },
-            40
-        );
-
-
-    setTimeout(
-        () => {
-
-            clearInterval(
-                collisionInterval
-            );
-
-
-            if (heart.isConnected) {
 
                 heart.remove();
 
+                clearInterval(collision);
+
             }
 
-        },
-        (fallDuration + .5) * 1000
-    );
+        }, 50);
+
+
+    setTimeout(() => {
+
+        clearInterval(collision);
+
+        if (heart.isConnected) {
+            heart.remove();
+        }
+
+    }, (duration + 0.5) * 1000);
 
 }
 
 
-function updateGameProgress() {
-
-    if (!gameProgress) return;
-
-
-    const percentage =
-        Math.min(
-            score / 10 * 100,
-            100
-        );
-
-
-    gameProgress.style.width =
-        percentage + "%";
-
-}
-
+/* Start game */
 
 function startHeartGame() {
 
     if (!gameArea) return;
 
 
-    clearInterval(
-        gameTimerInterval
-    );
+    clearInterval(gameInterval);
 
-    clearInterval(
-        heartSpawnInterval
-    );
+    clearInterval(spawnInterval);
 
-
-    gameRunning = true;
 
     score = 0;
 
-    gameTime = 30;
+    gameTime = 6;
+
+    gameRunning = true;
 
 
-    if (heartScore) {
+    heartScore.textContent = "0";
 
-        heartScore.textContent = "0";
+    gameTimer.textContent =
+        gameTime;
 
-    }
-
-
-    if (gameTimer) {
-
-        gameTimer.textContent =
-            gameTime;
-
-    }
+    gameProgress.style.width =
+        "0%";
 
 
-    if (gameProgress) {
-
-        gameProgress.style.width =
-            "0%";
-
-    }
+    gameResult.classList.add(
+        "hidden-element"
+    );
 
 
-    if (gameResult) {
-
-        gameResult.classList.add(
-            "hidden-element"
-        );
-
-    }
+    playerBasket.style.left =
+        "50%";
 
 
-    gameTimerInterval =
-        setInterval(
-            () => {
-
-                if (!gameRunning) return;
-
-
-                gameTime--;
-
-
-                if (gameTimer) {
-
-                    gameTimer.textContent =
-                        gameTime;
-
-                }
-
-
-                if (gameTime <= 0) {
-
-                    endHeartGame(false);
-
-                }
-
-            },
-            1000
-        );
-
-
-    heartSpawnInterval =
+    spawnInterval =
         setInterval(
             createGameHeart,
-            450
+            500
         );
+
+
+    gameInterval =
+        setInterval(() => {
+
+            gameTime--;
+
+            gameTimer.textContent =
+                gameTime;
+
+
+            if (gameTime <= 0) {
+
+                endHeartGame();
+
+            }
+
+        }, 1000);
 
 }
 
 
-function endHeartGame(won) {
+/* End game */
+
+function endHeartGame() {
 
     if (!gameRunning) return;
 
@@ -1126,79 +790,21 @@ function endHeartGame(won) {
     gameRunning = false;
 
 
-    clearInterval(
-        gameTimerInterval
+    clearInterval(gameInterval);
+
+    clearInterval(spawnInterval);
+
+
+    gameResult.classList.remove(
+        "hidden-element"
     );
 
-    clearInterval(
-        heartSpawnInterval
-    );
 
+    setTimeout(() => {
 
-    if (gameResult) {
+        showScreen("cakeScreen");
 
-        gameResult.classList.remove(
-            "hidden-element"
-        );
-
-
-        const heading =
-            gameResult.querySelector("h3");
-
-        const paragraph =
-            gameResult.querySelector("p");
-
-
-        if (won) {
-
-            if (heading) {
-
-                heading.textContent =
-                    "You caught my love! ❤️";
-
-            }
-
-
-            if (paragraph) {
-
-                paragraph.textContent =
-                    "As if you haven't already stolen enough of it. 🙄❤️";
-
-            }
-
-        }
-        else {
-
-            if (heading) {
-
-                heading.textContent =
-                    "Almost! ❤️";
-
-            }
-
-
-            if (paragraph) {
-
-                paragraph.textContent =
-                    "I think I threw a little too much love at you. 😭";
-
-            }
-
-        }
-
-    }
-
-
-    setTimeout(
-        () => {
-
-            showScreen(
-                "cakeScreen"
-            );
-
-        },
-        1700
-    );
+    }, 1800);
 
 }
 
@@ -1208,90 +814,63 @@ function endHeartGame(won) {
 ========================================================= */
 
 const cakeTabs =
-    document.querySelectorAll(
-        ".cake-tab"
-    );
+    document.querySelectorAll(".cake-tab");
 
 const cakePanels =
-    document.querySelectorAll(
-        ".cake-panel"
-    );
+    document.querySelectorAll(".cake-panel");
 
 
-cakeTabs.forEach(
-    tab => {
+cakeTabs.forEach(tab => {
 
-        tab.addEventListener(
-            "click",
-            () => {
+    tab.addEventListener("click", () => {
 
-                const target =
-                    tab.dataset.tab;
+        const target =
+            tab.dataset.tab;
 
 
-                cakeTabs.forEach(
-                    item => {
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-                cakePanels.forEach(
-                    panel => {
-
-                        panel.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-                tab.classList.add(
-                    "active"
-                );
-
-
-                const panel =
-                    document.querySelector(
-                        `[data-panel="${target}"]`
-                    );
-
-
-                if (panel) {
-
-                    panel.classList.add(
-                        "active"
-                    );
-
-                }
-
-            }
+        cakeTabs.forEach(item =>
+            item.classList.remove("active")
         );
 
-    }
-);
+
+        cakePanels.forEach(panel =>
+            panel.classList.remove("active")
+        );
+
+
+        tab.classList.add("active");
+
+
+        const panel =
+            document.querySelector(
+                `[data-panel="${target}"]`
+            );
+
+
+        if (panel) {
+
+            panel.classList.add("active");
+
+        }
+
+    });
+
+});
 
 
 /* Cake flavor */
 
 const cakeLayers =
-    document.querySelectorAll(
-        ".cake-layer"
-    );
+    document.querySelectorAll(".cake-layer");
 
 
 const flavorColors = {
 
     chocolate: "#70452f",
 
-    vanilla: "#f1d49d",
+    vanilla: "#f4d9a5",
 
-    strawberry: "#e99bad",
+    strawberry: "#e995a9",
 
     redvelvet: "#a83b49"
 
@@ -1300,178 +879,154 @@ const flavorColors = {
 
 document
     .querySelectorAll("[data-flavor]")
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            "[data-flavor]"
+                document
+                    .querySelectorAll(
+                        "[data-flavor]"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "selected"
                         )
-                        .forEach(
-                            item => {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            }
-                        );
-
-
-                    button.classList.add(
-                        "selected"
                     );
 
 
-                    const flavor =
-                        button.dataset.flavor;
+                button.classList.add(
+                    "selected"
+                );
 
 
-                    cakeLayers.forEach(
-                        layer => {
+                cakeLayers.forEach(
+                    layer => {
 
-                            layer.style.background =
-                                flavorColors[
-                                    flavor
-                                ];
+                        layer.style.background =
+                            flavorColors[
+                                button.dataset.flavor
+                            ];
 
-                        }
-                    );
+                    }
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
-/* Cake layers */
+/* Layers */
 
 document
     .querySelectorAll("[data-layers]")
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            "[data-layers]"
+                document
+                    .querySelectorAll(
+                        "[data-layers]"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "selected"
                         )
-                        .forEach(
-                            item => {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            }
-                        );
-
-
-                    button.classList.add(
-                        "selected"
                     );
 
 
-                    const number =
-                        Number(
-                            button.dataset.layers
-                        );
+                button.classList.add(
+                    "selected"
+                );
 
 
-                    const third =
-                        document.querySelector(
-                            ".layer-three"
-                        );
-
-                    const fourth =
-                        document.querySelector(
-                            ".layer-four"
-                        );
+                const number =
+                    Number(
+                        button.dataset.layers
+                    );
 
 
-                    if (third) {
+                const three =
+                    document.querySelector(
+                        ".layer-three"
+                    );
 
-                        third.style.display =
-                            number >= 3
-                                ? "block"
-                                : "none";
-
-                    }
+                const four =
+                    document.querySelector(
+                        ".layer-four"
+                    );
 
 
-                    if (fourth) {
+                if (three) {
 
-                        fourth.style.display =
-                            number >= 4
-                                ? "block"
-                                : "none";
-
-                    }
+                    three.style.display =
+                        number >= 3
+                            ? "block"
+                            : "none";
 
                 }
-            );
 
-        }
-    );
+
+                if (four) {
+
+                    four.style.display =
+                        number >= 4
+                            ? "block"
+                            : "none";
+
+                }
+
+            }
+        );
+
+    });
 
 
 /* Frosting */
 
 const cakeTop =
-    document.getElementById(
-        "cakeTop"
-    );
+    document.getElementById("cakeTop");
 
 
 document
     .querySelectorAll("[data-frosting]")
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            "[data-frosting]"
+                document
+                    .querySelectorAll(
+                        "[data-frosting]"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "selected"
                         )
-                        .forEach(
-                            item => {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            }
-                        );
-
-
-                    button.classList.add(
-                        "selected"
                     );
 
 
-                    if (cakeTop) {
+                button.classList.add(
+                    "selected"
+                );
 
-                        cakeTop.style.background =
-                            button.dataset.frosting;
 
-                    }
+                if (cakeTop) {
+
+                    cakeTop.style.background =
+                        button.dataset.frosting;
 
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /* Decorations */
@@ -1497,50 +1052,46 @@ const decorations = {
 
 document
     .querySelectorAll("[data-decor]")
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            "[data-decor]"
+                document
+                    .querySelectorAll(
+                        "[data-decor]"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "selected"
                         )
-                        .forEach(
-                            item => {
-
-                                item.classList.remove(
-                                    "selected"
-                                );
-
-                            }
-                        );
-
-
-                    button.classList.add(
-                        "selected"
                     );
 
 
-                    if (cakeDecoration) {
+                button.classList.add(
+                    "selected"
+                );
 
-                        cakeDecoration.textContent =
-                            decorations[
-                                button.dataset.decor
-                            ];
 
-                    }
+                if (cakeDecoration) {
+
+                    cakeDecoration.textContent =
+                        decorations[
+                            button.dataset.decor
+                        ];
 
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
-/* Candles */
+/* =========================================================
+   CANDLES
+========================================================= */
 
 const cakeCandles =
     document.getElementById(
@@ -1568,7 +1119,7 @@ const blowCandles =
     );
 
 
-let candleNumber = 0;
+let candles = 0;
 
 
 if (addCandle) {
@@ -1577,10 +1128,10 @@ if (addCandle) {
         "click",
         () => {
 
-            if (candleNumber >= 10) return;
+            if (candles >= 10) return;
 
 
-            candleNumber++;
+            candles++;
 
 
             const candle =
@@ -1599,7 +1150,7 @@ if (addCandle) {
 
 
             candleCount.textContent =
-                candleNumber;
+                candles;
 
         }
     );
@@ -1613,11 +1164,13 @@ if (removeCandles) {
         "click",
         () => {
 
-            candleNumber = 0;
+            candles = 0;
 
-            cakeCandles.innerHTML = "";
+            cakeCandles.innerHTML =
+                "";
 
-            candleCount.textContent = "0";
+            candleCount.textContent =
+                "0";
 
         }
     );
@@ -1631,7 +1184,7 @@ if (blowCandles) {
         "click",
         () => {
 
-            if (candleNumber === 0) {
+            if (candles === 0) {
 
                 alert(
                     "Add some candles first! 🕯️"
@@ -1642,18 +1195,14 @@ if (blowCandles) {
             }
 
 
-            document
+            cakeCandles
                 .querySelectorAll(
                     ".cake-candle"
                 )
-                .forEach(
-                    candle => {
-
-                        candle.classList.add(
-                            "blown"
-                        );
-
-                    }
+                .forEach(candle =>
+                    candle.classList.add(
+                        "blown"
+                    )
                 );
 
 
@@ -1665,7 +1214,7 @@ if (blowCandles) {
 }
 
 
-/* Cake done */
+/* Cake Done */
 
 const cakeDone =
     document.getElementById(
@@ -1680,7 +1229,6 @@ if (cakeDone) {
         () => {
 
             createConfetti();
-
 
             setTimeout(
                 () => {
@@ -1709,7 +1257,6 @@ function createConfetti() {
         "❤️",
         "💕",
         "✨",
-        "🌸",
         "🎀"
     ];
 
@@ -1738,32 +1285,21 @@ function createConfetti() {
         piece.style.position =
             "fixed";
 
-
         piece.style.left =
-            Math.random() *
-            100 +
-            "vw";
-
+            Math.random() * 100 + "vw";
 
         piece.style.top =
             "-30px";
 
-
         piece.style.fontSize =
-            (
-                13 +
-                Math.random() * 18
-            ) +
+            (15 + Math.random() * 20) +
             "px";
 
-
         piece.style.zIndex =
-            "2000";
-
+            "999";
 
         piece.style.pointerEvents =
             "none";
-
 
         piece.style.transition =
             "transform 2s ease, opacity 2s ease";
@@ -1774,32 +1310,24 @@ function createConfetti() {
         );
 
 
-        requestAnimationFrame(
-            () => {
+        requestAnimationFrame(() => {
 
-                piece.style.transform =
-                    `
-                    translateY(
-                        ${window.innerHeight + 100}px
-                    )
-                    rotate(
-                        ${Math.random() * 720}deg
-                    )
-                    `;
+            piece.style.transform =
+                `translateY(
+                    ${window.innerHeight + 100}px
+                )
+                rotate(
+                    ${Math.random() * 720}deg
+                )`;
 
+            piece.style.opacity =
+                "0";
 
-                piece.style.opacity = "0";
-
-            }
-        );
+        });
 
 
         setTimeout(
-            () => {
-
-                piece.remove();
-
-            },
+            () => piece.remove(),
             2200
         );
 
@@ -1809,12 +1337,12 @@ function createConfetti() {
 
 
 /* =========================================================
-   THREE LITTLE GIFTS
+   LOVE MESSAGE CARDS
 ========================================================= */
 
-const giftBoxes =
+const loveCards =
     document.querySelectorAll(
-        ".gift-box"
+        ".love-card"
     );
 
 const loveMessage =
@@ -1833,41 +1361,32 @@ const closeLoveMessage =
     );
 
 
-giftBoxes.forEach(
-    gift => {
+loveCards.forEach(card => {
 
-        gift.addEventListener(
-            "click",
-            () => {
+    card.addEventListener(
+        "click",
+        () => {
 
-                const message =
-                    gift.dataset.message;
+            if (loveMessageText) {
 
-
-                if (loveMessageText) {
-
-                    loveMessageText.textContent =
-                        message;
-
-                }
-
-
-                if (loveMessage) {
-
-                    loveMessage.classList.remove(
-                        "hidden-element"
-                    );
-
-                }
-
-
-                createConfetti();
+                loveMessageText.textContent =
+                    card.dataset.message;
 
             }
-        );
 
-    }
-);
+
+            if (loveMessage) {
+
+                loveMessage.classList.remove(
+                    "hidden-element"
+                );
+
+            }
+
+        }
+    );
+
+});
 
 
 if (closeLoveMessage) {
@@ -1906,17 +1425,7 @@ if (finalButton) {
         "click",
         () => {
 
-            if (loveMessage) {
-
-                loveMessage.classList.add(
-                    "hidden-element"
-                );
-
-            }
-
-
             createConfetti();
-
 
             setTimeout(
                 () => {
@@ -1960,14 +1469,14 @@ if (replayButton) {
 
 
 /* =========================================================
-   STARTUP
+   DONE
 ========================================================= */
 
 console.log(
-    "❤️ Fatema Birthday Website Loaded"
+    "❤️ Fatema Birthday Website Loaded!"
 );
 
 console.log(
-    "🔒 Birthday unlock:",
-    birthday.toString()
+    "Birthday:",
+    birthday
 );
