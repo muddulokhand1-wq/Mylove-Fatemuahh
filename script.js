@@ -649,7 +649,22 @@ function resetReasons() {
 
         }
     );
+/* =========================================================
+   REASONS → HEART GAME
+========================================================= */
 
+if (reasonsContinue) {
+
+    reasonsContinue.addEventListener(
+        "click",
+        () => {
+
+            showScreen("gameScreen");
+
+        }
+    );
+
+}
 
     if (reasonsContinue) {
 
