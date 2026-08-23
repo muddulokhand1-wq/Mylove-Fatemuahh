@@ -1,91 +1,76 @@
-/* =========================================
+/* =========================================================
+   FATEMA BIRTHDAY WEBSITE — FINAL SCRIPT
+========================================================= */
+
+
+/* =========================================================
    FLOATING HEARTS
-========================================= */
+========================================================= */
 
-const hearts = document.querySelector(".hearts");
+const heartsContainer = document.querySelector(".hearts");
 
-function createHeart() {
+function createFloatingHeart() {
 
-    if (!hearts) return;
+    if (!heartsContainer) return;
 
     const heart = document.createElement("div");
 
     heart.className = "heart";
 
-    heart.innerHTML = "❤";
+    heart.innerHTML =
+        ["❤", "♡", "💕", "♥"][
+            Math.floor(Math.random() * 4)
+        ];
 
     heart.style.left =
         Math.random() * 100 + "vw";
 
     heart.style.fontSize =
-        (15 + Math.random() * 25) + "px";
+        (14 + Math.random() * 22) + "px";
 
     heart.style.animationDuration =
-        (6 + Math.random() * 4) + "s";
+        (6 + Math.random() * 5) + "s";
 
-    hearts.appendChild(heart);
+    heartsContainer.appendChild(heart);
 
     setTimeout(() => {
         heart.remove();
-    }, 10000);
+    }, 12000);
 }
 
-setInterval(createHeart, 350);
+setInterval(createFloatingHeart, 450);
 
 
-/* =========================================
+/* =========================================================
    SCREEN MANAGEMENT
-========================================= */
+========================================================= */
 
-const screens =
-    document.querySelectorAll(".screen");
+const screens = document.querySelectorAll(".screen");
 
-let currentScreen =
-    "countdownScreen";
-
+let currentScreen = "countdownScreen";
 
 function showScreen(screenId) {
 
-    screens.forEach(screen => {
+    const target = document.getElementById(screenId);
 
-        screen.classList.remove(
-            "active-screen"
-        );
-
-        screen.classList.add(
-            "hidden-screen"
-        );
-
-    });
-
-
-    const nextScreen =
-        document.getElementById(screenId);
-
-
-    if (!nextScreen) {
-
-        console.error(
-            "Screen not found:",
-            screenId
-        );
-
+    if (!target) {
+        console.error("Screen not found:", screenId);
         return;
     }
 
+    screens.forEach(screen => {
 
-    nextScreen.classList.remove(
-        "hidden-screen"
-    );
+        screen.classList.remove("active-screen");
 
-    nextScreen.classList.add(
-        "active-screen"
-    );
+        screen.classList.add("hidden-screen");
 
+    });
 
-    currentScreen =
-        screenId;
+    target.classList.remove("hidden-screen");
 
+    target.classList.add("active-screen");
+
+    currentScreen = screenId;
 
     window.scrollTo({
         top: 0,
@@ -93,175 +78,126 @@ function showScreen(screenId) {
     });
 
 
-    /* Start heart game when opened */
-
-    if (
-        screenId === "gameScreen" &&
-        !gameRunning
-    ) {
-
+    if (screenId === "gameScreen") {
         startHeartGame();
+    }
 
+    if (screenId === "reasonsScreen") {
+        resetReasons();
     }
 
 }
 
 
-/* =========================================
-   COUNTDOWN
-========================================= */
+/* =========================================================
+   NEXT BUTTONS
+========================================================= */
+
+document
+    .querySelectorAll("[data-next]")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const nextScreen =
+                button.dataset.next;
+
+            showScreen(nextScreen);
+
+        });
+
+    });
+
+
+/* =========================================================
+   🔒 BIRTHDAY COUNTDOWN + LOCK
+========================================================= */
 
 const countdown =
-    document.getElementById(
-        "countdown"
-    );
-
+    document.getElementById("countdown");
 
 const countdownButton =
-    document.getElementById(
-        "countdownButton"
-    );
+    document.getElementById("countdownButton");
 
 
 /*
-   REAL BIRTHDAY
+    BIRTHDAY:
+    26 AUGUST 2026
+    2:57 PM IST
 
-   26 August 2026
-   2:57 PM
+    The +05:30 forces Indian Standard Time.
 */
 
 const birthday =
-    new Date(
-        "2026-08-26T14:57:00"
-    );
+    new Date("2026-08-26T14:57:00+05:30");
 
 
-/*
-   TEST MODE
+function isBirthdayUnlocked() {
 
-   true  = opens now
-   false = locked until birthday
+    return new Date() >= birthday;
 
-   KEEP TRUE WHILE TESTING.
-
-   Before giving it to Fatema:
-   change true → false
-*/
-
-const TEST_MODE = false
-;
-
-
-let birthdayUnlocked =
-    TEST_MODE;
+}
 
 
 function updateCountdown() {
 
+    const now = new Date();
 
-    /* =====================================
-       TEST MODE
-    ===================================== */
-
-    if (TEST_MODE) {
-
-        countdown.innerHTML = `
-
-            <div class="timer">
-
-                <div>
-
-                    <span>🎉</span>
-
-                    <small>
-                        Unlocked
-                    </small>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        countdownButton.innerHTML =
-            "💌 Open Your Surprise";
-
-
-        countdownButton.disabled =
-            false;
-
-
-        return;
-    }
-
-
-    /* =====================================
-       REAL COUNTDOWN
-    ===================================== */
-
-    const now =
-        new Date();
-
-
-    const diff =
+    const difference =
         birthday - now;
 
 
-    /* Birthday reached */
+    /* -----------------------------------------
+       🎉 BIRTHDAY HAS ARRIVED
+    ----------------------------------------- */
 
-    if (diff <= 0) {
-
-        birthdayUnlocked =
-            true;
-
+    if (difference <= 0) {
 
         countdown.innerHTML =
             "🎉 Happy Birthday Fatema ❤️";
 
-
         countdownButton.innerHTML =
-            "💌 Open Your Surprise";
-
+            "💌 Open Your Surprise ❤️";
 
         countdownButton.disabled =
             false;
 
-
         return;
+
     }
 
 
+    /* -----------------------------------------
+       🔒 STILL LOCKED
+    ----------------------------------------- */
+
     const days =
         Math.floor(
-            diff /
+            difference /
             1000 /
             60 /
             60 /
             24
         );
 
-
     const hours =
         Math.floor(
-            diff /
+            difference /
             1000 /
             60 /
             60
         ) % 24;
 
-
-    const mins =
+    const minutes =
         Math.floor(
-            diff /
+            difference /
             1000 /
             60
         ) % 60;
 
-
-    const secs =
+    const seconds =
         Math.floor(
-            diff /
+            difference /
             1000
         ) % 60;
 
@@ -271,64 +207,40 @@ function updateCountdown() {
         <div class="timer">
 
             <div>
-
-                <span>
-                    ${days}
-                </span>
-
-                <small>
-                    Days
-                </small>
-
+                <span>${days}</span>
+                <small>Days</small>
             </div>
 
-
             <div>
-
-                <span>
-                    ${hours}
-                </span>
-
-                <small>
-                    Hours
-                </small>
-
+                <span>${hours}</span>
+                <small>Hours</small>
             </div>
 
-
             <div>
-
-                <span>
-                    ${mins}
-                </span>
-
-                <small>
-                    Minutes
-                </small>
-
+                <span>${minutes}</span>
+                <small>Minutes</small>
             </div>
 
-
             <div>
-
-                <span>
-                    ${secs}
-                </span>
-
-                <small>
-                    Seconds
-                </small>
-
+                <span>${seconds}</span>
+                <small>Seconds</small>
             </div>
 
         </div>
 
     `;
+
+
+    countdownButton.innerHTML =
+        "🔒 Opens on 26 August 2026 🎂";
+
+    countdownButton.disabled =
+        true;
+
 }
 
 
 updateCountdown();
-
 
 setInterval(
     updateCountdown,
@@ -336,9 +248,9 @@ setInterval(
 );
 
 
-/* =========================================
-   COUNTDOWN → BIRTHDAY
-========================================= */
+/* -----------------------------------------
+   OPEN SURPRISE BUTTON
+----------------------------------------- */
 
 if (countdownButton) {
 
@@ -346,31 +258,33 @@ if (countdownButton) {
         "click",
         () => {
 
-            if (!birthdayUnlocked) {
+            /*
+                ALWAYS check the real time.
+
+                Before:
+                → Nothing happens.
+
+                After:
+                → Opens birthday screen.
+            */
+
+            if (!isBirthdayUnlocked()) {
 
                 countdownButton.animate(
 
                     [
                         {
-                            transform:
-                                "translateX(0)"
+                            transform: "translateX(0)"
                         },
-
                         {
-                            transform:
-                                "translateX(-5px)"
+                            transform: "translateX(-6px)"
                         },
-
                         {
-                            transform:
-                                "translateX(5px)"
+                            transform: "translateX(6px)"
                         },
-
                         {
-                            transform:
-                                "translateX(0)"
+                            transform: "translateX(0)"
                         }
-
                     ],
 
                     {
@@ -380,11 +294,119 @@ if (countdownButton) {
                 );
 
                 return;
+
             }
 
 
-            showScreen(
-                "birthdayScreen"
+            showScreen("birthdayScreen");
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MILESTONE — DAYS LIVED
+========================================================= */
+
+const birthDate =
+    new Date("2003-08-26T00:00:00+05:30");
+
+
+function updateDaysLived() {
+
+    const daysLivedElement =
+        document.getElementById("daysLived");
+
+    if (!daysLivedElement) return;
+
+
+    const today =
+        new Date();
+
+
+    const difference =
+        today - birthDate;
+
+
+    const days =
+        Math.floor(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    daysLivedElement.textContent =
+        days.toLocaleString();
+
+}
+
+
+updateDaysLived();
+
+
+/* =========================================================
+   MEMORY GALLERY
+========================================================= */
+
+const memoryPhotos =
+    document.querySelectorAll(".memory-photo");
+
+const memoryDots =
+    document.querySelectorAll("#memoryDots span");
+
+const memoryPrev =
+    document.getElementById("memoryPrev");
+
+const memoryNext =
+    document.getElementById("memoryNext");
+
+
+let currentMemory = 0;
+
+
+function showMemory(index) {
+
+    if (memoryPhotos.length === 0) return;
+
+
+    if (index < 0) {
+
+        index =
+            memoryPhotos.length - 1;
+
+    }
+
+
+    if (index >= memoryPhotos.length) {
+
+        index = 0;
+
+    }
+
+
+    currentMemory = index;
+
+
+    memoryPhotos.forEach(
+        (photo, i) => {
+
+            photo.classList.toggle(
+                "active-memory",
+                i === currentMemory
+            );
+
+        }
+    );
+
+
+    memoryDots.forEach(
+        (dot, i) => {
+
+            dot.classList.toggle(
+                "active-dot",
+                i === currentMemory
             );
 
         }
@@ -393,103 +415,66 @@ if (countdownButton) {
 }
 
 
-/* =========================================
-   GENERIC NEXT BUTTONS
-========================================= */
+if (memoryNext) {
 
-document
-    .querySelectorAll("[data-next]")
-    .forEach(button => {
+    memoryNext.addEventListener(
+        "click",
+        () => {
 
-        button.addEventListener(
+            showMemory(
+                currentMemory + 1
+            );
+
+        }
+    );
+
+}
+
+
+if (memoryPrev) {
+
+    memoryPrev.addEventListener(
+        "click",
+        () => {
+
+            showMemory(
+                currentMemory - 1
+            );
+
+        }
+    );
+
+}
+
+
+memoryDots.forEach(
+    (dot, index) => {
+
+        dot.addEventListener(
             "click",
             () => {
 
-                const nextScreen =
-                    button.dataset.next;
-
-                showScreen(
-                    nextScreen
-                );
+                showMemory(index);
 
             }
         );
 
-    });
+    }
+);
 
 
-/* =========================================
-   MILESTONE
-========================================= */
-
-const birthdayAge = 23;
+showMemory(0);
 
 
-const ageElement =
-    document.getElementById(
-        "birthdayAge"
-    );
-
-
-if (ageElement) {
-
-    ageElement.textContent =
-        birthdayAge;
-
-}
-
-
-/*
-   Fatema's date of birth
-*/
-
-const birthDate =
-    new Date(
-        "2003-08-26T00:00:00"
-    );
-
-
-const today =
-    new Date();
-
-
-const milliseconds =
-    today - birthDate;
-
-
-const daysLived =
-    Math.floor(
-        milliseconds /
-        (1000 * 60 * 60 * 24)
-    );
-
-
-const daysLivedElement =
-    document.getElementById(
-        "daysLived"
-    );
-
-
-if (daysLivedElement) {
-
-    daysLivedElement.textContent =
-        daysLived.toLocaleString();
-
-}
-
-
-/* =========================================
+/* =========================================================
    ENVELOPE
-========================================= */
+========================================================= */
 
 const envelope =
-    document.getElementById(
-        "envelope"
-    );
+    document.getElementById("envelope");
 
 
-let envelopeOpened =
-    false;
+let envelopeOpened = false;
 
 
 if (envelope) {
@@ -498,32 +483,23 @@ if (envelope) {
         "click",
         () => {
 
-            if (envelopeOpened) {
-
-                return;
-
-            }
+            if (envelopeOpened) return;
 
 
-            envelopeOpened =
-                true;
+            envelopeOpened = true;
 
 
-            envelope.classList.add(
-                "open"
-            );
+            envelope.classList.add("open");
 
 
             const tapText =
-                document.querySelector(
-                    ".tap-text"
-                );
+                document.querySelector(".tap-text");
 
 
             if (tapText) {
 
                 tapText.textContent =
-                    "Your letter is waiting... 💕";
+                    "Opening something from my heart... ❤️";
 
             }
 
@@ -536,7 +512,7 @@ if (envelope) {
                     );
 
                 },
-                1800
+                1500
             );
 
         }
@@ -545,33 +521,20 @@ if (envelope) {
 }
 
 
-/* =========================================
+/* =========================================================
    12 REASONS
-========================================= */
+========================================================= */
 
 const reasonCards =
-    document.querySelectorAll(
-        ".reason-card"
-    );
-
+    document.querySelectorAll(".reason-card");
 
 const reasonCounter =
+    document.getElementById("reasonCounter");
+
+const reasonProgressFill =
     document.getElementById(
-        "reasonCounter"
+        "reasonProgressFill"
     );
-
-
-const revealNext =
-    document.getElementById(
-        "revealNext"
-    );
-
-
-const revealAll =
-    document.getElementById(
-        "revealAll"
-    );
-
 
 const reasonsContinue =
     document.getElementById(
@@ -579,65 +542,44 @@ const reasonsContinue =
     );
 
 
-let revealedReasons =
-    0;
+let revealedReasons = 0;
 
 
-function updateReasonCounter() {
+function updateReasonProgress() {
 
-    if (!reasonCounter) {
-
-        return;
-
-    }
+    const total =
+        reasonCards.length;
 
 
-    reasonCounter.textContent =
-        `${revealedReasons} / 12 Reasons Revealed ❤️`;
+    if (reasonCounter) {
 
-}
-
-
-function revealReason() {
-
-    if (
-        revealedReasons >=
-        reasonCards.length
-    ) {
-
-        return;
+        reasonCounter.textContent =
+            `${revealedReasons} / ${total}`;
 
     }
 
 
-    reasonCards[
-        revealedReasons
-    ].classList.add(
-        "revealed"
-    );
+    if (reasonProgressFill) {
+
+        const percentage =
+            total === 0
+                ? 0
+                : (
+                    revealedReasons /
+                    total
+                ) * 100;
 
 
-    revealedReasons++;
+        reasonProgressFill.style.width =
+            percentage + "%";
 
-
-    updateReasonCounter();
+    }
 
 
     if (
-        revealedReasons >=
-        reasonCards.length
+        revealedReasons >= total &&
+        total > 0
     ) {
-
-        if (revealNext) {
-
-            revealNext.disabled =
-                true;
-
-            revealNext.textContent =
-                "All Revealed ❤️";
-
-        }
-
 
         if (reasonsContinue) {
 
@@ -652,117 +594,148 @@ function revealReason() {
 }
 
 
-if (revealNext) {
+function revealReason(card) {
 
-    revealNext.addEventListener(
-        "click",
-        revealReason
-    );
+    if (
+        card.classList.contains("revealed")
+    ) {
 
-}
+        return;
 
-
-if (revealAll) {
-
-    revealAll.addEventListener(
-        "click",
-        () => {
-
-            reasonCards.forEach(
-                card => {
-
-                    card.classList.add(
-                        "revealed"
-                    );
-
-                }
-            );
+    }
 
 
-            revealedReasons =
-                reasonCards.length;
+    card.classList.add("revealed");
 
 
-            updateReasonCounter();
+    revealedReasons++;
 
 
-            if (revealNext) {
-
-                revealNext.disabled =
-                    true;
-
-                revealNext.textContent =
-                    "All Revealed ❤️";
-
-            }
+    updateReasonProgress();
 
 
-            if (reasonsContinue) {
-
-                reasonsContinue.classList.remove(
-                    "hidden-element"
-                );
-
-            }
-
-        }
-    );
+    createTinyHeart(card);
 
 }
 
 
-if (reasonsContinue) {
+reasonCards.forEach(
+    card => {
 
-    reasonsContinue.addEventListener(
-        "click",
-        () => {
+        card.addEventListener(
+            "click",
+            () => {
 
-            showScreen(
-                "gameScreen"
+                revealReason(card);
+
+            }
+        );
+
+    }
+);
+
+
+function resetReasons() {
+
+    revealedReasons = 0;
+
+
+    reasonCards.forEach(
+        card => {
+
+            card.classList.remove(
+                "revealed"
             );
 
         }
     );
 
+
+    if (reasonsContinue) {
+
+        reasonsContinue.classList.add(
+            "hidden-element"
+        );
+
+    }
+
+
+    updateReasonProgress();
+
 }
 
 
-updateReasonCounter();
+function createTinyHeart(element) {
+
+    const heart =
+        document.createElement("span");
 
 
-/* =========================================
-   HEART CATCHING GAME
-========================================= */
+    heart.textContent = "❤️";
+
+
+    heart.style.position =
+        "absolute";
+
+    heart.style.right =
+        "20px";
+
+    heart.style.bottom =
+        "15px";
+
+    heart.style.fontSize =
+        "16px";
+
+    heart.style.pointerEvents =
+        "none";
+
+    heart.style.animation =
+        "reasonHeartPop .7s ease forwards";
+
+
+    element.appendChild(heart);
+
+
+    setTimeout(
+        () => {
+
+            heart.remove();
+
+        },
+        800
+    );
+
+}
+
+
+/* =========================================================
+   ❤️ HEART CATCHING GAME
+========================================================= */
 
 const gameArea =
     document.getElementById(
         "heartGameArea"
     );
 
-
 const playerBasket =
     document.getElementById(
         "playerBasket"
     );
-
 
 const heartScore =
     document.getElementById(
         "heartScore"
     );
 
-
 const gameTimer =
     document.getElementById(
         "gameTimer"
     );
 
-
 const gameProgress =
     document.getElementById(
         "gameProgress"
     );
-
 
 const gameResult =
     document.getElementById(
@@ -772,16 +745,14 @@ const gameResult =
 
 let score = 0;
 
-let gameTime = 6;
+let gameTime = 30;
 
 let gameRunning = false;
 
-let gameInterval = null;
+let gameTimerInterval = null;
 
-let spawnInterval = null;
+let heartSpawnInterval = null;
 
-
-/* Move basket */
 
 function moveBasket(clientX) {
 
@@ -810,18 +781,12 @@ function moveBasket(clientX) {
 
 
     x = Math.max(
-
         basketWidth / 2,
-
         Math.min(
-
             rect.width -
             basketWidth / 2,
-
             x
-
         )
-
     );
 
 
@@ -830,8 +795,6 @@ function moveBasket(clientX) {
 
 }
 
-
-/* Mouse */
 
 if (gameArea) {
 
@@ -847,8 +810,6 @@ if (gameArea) {
     );
 
 
-    /* Touch */
-
     gameArea.addEventListener(
         "touchmove",
         event => {
@@ -856,9 +817,7 @@ if (gameArea) {
             event.preventDefault();
 
 
-            if (
-                event.touches.length
-            ) {
+            if (event.touches.length) {
 
                 moveBasket(
                     event.touches[0].clientX
@@ -875,8 +834,6 @@ if (gameArea) {
 }
 
 
-/* Create falling heart */
-
 function createGameHeart() {
 
     if (
@@ -890,9 +847,7 @@ function createGameHeart() {
 
 
     const heart =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     heart.className =
@@ -912,18 +867,21 @@ function createGameHeart() {
         ];
 
 
-    const areaWidth =
-        gameArea.clientWidth;
+    const maxLeft =
+        Math.max(
+            0,
+            gameArea.clientWidth - 35
+        );
 
 
     heart.style.left =
         Math.random() *
-        (areaWidth - 35) +
+        maxLeft +
         "px";
 
 
     const fallDuration =
-        2.2 +
+        1.8 +
         Math.random() * 1.2;
 
 
@@ -931,19 +889,17 @@ function createGameHeart() {
         fallDuration + "s";
 
 
-    gameArea.appendChild(
-        heart
-    );
+    gameArea.appendChild(heart);
 
 
-    const checkCollision =
+    const collisionInterval =
         setInterval(
             () => {
 
                 if (!gameRunning) {
 
                     clearInterval(
-                        checkCollision
+                        collisionInterval
                     );
 
                     return;
@@ -954,7 +910,7 @@ function createGameHeart() {
                 if (!heart.isConnected) {
 
                     clearInterval(
-                        checkCollision
+                        collisionInterval
                     );
 
                     return;
@@ -970,22 +926,21 @@ function createGameHeart() {
                     playerBasket.getBoundingClientRect();
 
 
-                const collision =
-
+                const caught =
                     heartRect.bottom >=
-                    basketRect.top &&
+                        basketRect.top &&
 
                     heartRect.left <
-                    basketRect.right &&
+                        basketRect.right &&
 
                     heartRect.right >
-                    basketRect.left &&
+                        basketRect.left &&
 
-                    heartRect.bottom <
-                    basketRect.bottom + 35;
+                    heartRect.top <
+                        basketRect.bottom;
 
 
-                if (collision) {
+                if (caught) {
 
                     score++;
 
@@ -994,28 +949,27 @@ function createGameHeart() {
                         score;
 
 
-                    const progress =
-                        Math.min(
-                            score / 10 * 100,
-                            100
-                        );
-
-
-                    gameProgress.style.width =
-                        progress + "%";
+                    updateGameProgress();
 
 
                     heart.remove();
 
 
                     clearInterval(
-                        checkCollision
+                        collisionInterval
                     );
+
+
+                    if (score >= 10) {
+
+                        endHeartGame(true);
+
+                    }
 
                 }
 
             },
-            50
+            40
         );
 
 
@@ -1023,107 +977,115 @@ function createGameHeart() {
         () => {
 
             clearInterval(
-                checkCollision
+                collisionInterval
             );
 
 
-            if (
-                heart.isConnected
-            ) {
+            if (heart.isConnected) {
 
                 heart.remove();
 
             }
 
         },
-        (fallDuration + 0.5) * 1000
+        (fallDuration + .5) * 1000
     );
 
 }
 
 
-/* Start game */
+function updateGameProgress() {
+
+    if (!gameProgress) return;
+
+
+    const percentage =
+        Math.min(
+            score / 10 * 100,
+            100
+        );
+
+
+    gameProgress.style.width =
+        percentage + "%";
+
+}
+
 
 function startHeartGame() {
 
-    if (!gameArea) {
+    if (!gameArea) return;
 
-        return;
+
+    clearInterval(
+        gameTimerInterval
+    );
+
+    clearInterval(
+        heartSpawnInterval
+    );
+
+
+    gameRunning = true;
+
+    score = 0;
+
+    gameTime = 30;
+
+
+    if (heartScore) {
+
+        heartScore.textContent = "0";
 
     }
 
 
-    score = 0;
+    if (gameTimer) {
 
-    gameTime = 6;
+        gameTimer.textContent =
+            gameTime;
 
-    gameRunning = true;
-
-
-    heartScore.textContent =
-        "0";
+    }
 
 
-    gameTimer.textContent =
-        gameTime;
+    if (gameProgress) {
+
+        gameProgress.style.width =
+            "0%";
+
+    }
 
 
-    gameProgress.style.width =
-        "0%";
+    if (gameResult) {
 
-
-    gameResult.classList.add(
-        "hidden-element"
-    );
-
-
-    playerBasket.style.left =
-        "50%";
-
-
-    clearInterval(
-        spawnInterval
-    );
-
-    clearInterval(
-        gameInterval
-    );
-
-
-    spawnInterval =
-        setInterval(
-            createGameHeart,
-            500
+        gameResult.classList.add(
+            "hidden-element"
         );
 
+    }
 
-    gameInterval =
+
+    gameTimerInterval =
         setInterval(
             () => {
+
+                if (!gameRunning) return;
+
 
                 gameTime--;
 
 
-                gameTimer.textContent =
-                    gameTime;
+                if (gameTimer) {
+
+                    gameTimer.textContent =
+                        gameTime;
+
+                }
 
 
-                const progress =
-                    (
-                        (6 - gameTime) /
-                        6
-                    ) * 100;
+                if (gameTime <= 0) {
 
-
-                gameProgress.style.width =
-                    progress + "%";
-
-
-                if (
-                    gameTime <= 0
-                ) {
-
-                    endHeartGame();
+                    endHeartGame(false);
 
                 }
 
@@ -1131,36 +1093,85 @@ function startHeartGame() {
             1000
         );
 
+
+    heartSpawnInterval =
+        setInterval(
+            createGameHeart,
+            450
+        );
+
 }
 
 
-/* End game */
+function endHeartGame(won) {
 
-function endHeartGame() {
+    if (!gameRunning) return;
 
-    if (!gameRunning) {
 
-        return;
+    gameRunning = false;
+
+
+    clearInterval(
+        gameTimerInterval
+    );
+
+    clearInterval(
+        heartSpawnInterval
+    );
+
+
+    if (gameResult) {
+
+        gameResult.classList.remove(
+            "hidden-element"
+        );
+
+
+        const heading =
+            gameResult.querySelector("h3");
+
+        const paragraph =
+            gameResult.querySelector("p");
+
+
+        if (won) {
+
+            if (heading) {
+
+                heading.textContent =
+                    "You caught my love! ❤️";
+
+            }
+
+
+            if (paragraph) {
+
+                paragraph.textContent =
+                    "As if you haven't already stolen enough of it. 🙄❤️";
+
+            }
+
+        }
+        else {
+
+            if (heading) {
+
+                heading.textContent =
+                    "Almost! ❤️";
+
+            }
+
+
+            if (paragraph) {
+
+                paragraph.textContent =
+                    "I think I threw a little too much love at you. 😭";
+
+            }
+
+        }
 
     }
-
-
-    gameRunning =
-        false;
-
-
-    clearInterval(
-        gameInterval
-    );
-
-    clearInterval(
-        spawnInterval
-    );
-
-
-    gameResult.classList.remove(
-        "hidden-element"
-    );
 
 
     setTimeout(
@@ -1171,21 +1182,20 @@ function endHeartGame() {
             );
 
         },
-        1800
+        1700
     );
 
 }
 
 
-/* =========================================
-   CAKE BUILDER
-========================================= */
+/* =========================================================
+   🎂 CAKE BUILDER
+========================================================= */
 
 const cakeTabs =
     document.querySelectorAll(
         ".cake-tab"
     );
-
 
 const cakePanels =
     document.querySelectorAll(
@@ -1252,9 +1262,7 @@ cakeTabs.forEach(
 );
 
 
-/* =========================================
-   CAKE FLAVOR
-========================================= */
+/* Cake flavor */
 
 const cakeLayers =
     document.querySelectorAll(
@@ -1264,25 +1272,19 @@ const cakeLayers =
 
 const flavorColors = {
 
-    chocolate:
-        "#70452f",
+    chocolate: "#70452f",
 
-    vanilla:
-        "#f4d9a5",
+    vanilla: "#f1d49d",
 
-    strawberry:
-        "#e995a9",
+    strawberry: "#e99bad",
 
-    redvelvet:
-        "#a83b49"
+    redvelvet: "#a83b49"
 
 };
 
 
 document
-    .querySelectorAll(
-        "[data-flavor]"
-    )
+    .querySelectorAll("[data-flavor]")
     .forEach(
         button => {
 
@@ -1332,14 +1334,10 @@ document
     );
 
 
-/* =========================================
-   CAKE LAYERS
-========================================= */
+/* Cake layers */
 
 document
-    .querySelectorAll(
-        "[data-layers]"
-    )
+    .querySelectorAll("[data-layers]")
     .forEach(
         button => {
 
@@ -1367,38 +1365,37 @@ document
                     );
 
 
-                    const layers =
+                    const number =
                         Number(
                             button.dataset.layers
                         );
 
 
-                    const layerThree =
+                    const third =
                         document.querySelector(
                             ".layer-three"
                         );
 
-
-                    const layerFour =
+                    const fourth =
                         document.querySelector(
                             ".layer-four"
                         );
 
 
-                    if (layerThree) {
+                    if (third) {
 
-                        layerThree.style.display =
-                            layers >= 3
+                        third.style.display =
+                            number >= 3
                                 ? "block"
                                 : "none";
 
                     }
 
 
-                    if (layerFour) {
+                    if (fourth) {
 
-                        layerFour.style.display =
-                            layers >= 4
+                        fourth.style.display =
+                            number >= 4
                                 ? "block"
                                 : "none";
 
@@ -1411,9 +1408,7 @@ document
     );
 
 
-/* =========================================
-   FROSTING
-========================================= */
+/* Frosting */
 
 const cakeTop =
     document.getElementById(
@@ -1422,9 +1417,7 @@ const cakeTop =
 
 
 document
-    .querySelectorAll(
-        "[data-frosting]"
-    )
+    .querySelectorAll("[data-frosting]")
     .forEach(
         button => {
 
@@ -1466,9 +1459,7 @@ document
     );
 
 
-/* =========================================
-   DECORATIONS
-========================================= */
+/* Decorations */
 
 const cakeDecoration =
     document.getElementById(
@@ -1476,10 +1467,21 @@ const cakeDecoration =
     );
 
 
+const decorations = {
+
+    flowers: "🌸",
+
+    sprinkles: "🌈",
+
+    hearts: "❤️",
+
+    none: ""
+
+};
+
+
 document
-    .querySelectorAll(
-        "[data-decor]"
-    )
+    .querySelectorAll("[data-decor]")
     .forEach(
         button => {
 
@@ -1507,27 +1509,14 @@ document
                     );
 
 
-                    const decorations = {
+                    if (cakeDecoration) {
 
-                        flowers:
-                            "🌸",
+                        cakeDecoration.textContent =
+                            decorations[
+                                button.dataset.decor
+                            ];
 
-                        sprinkles:
-                            "🌈",
-
-                        hearts:
-                            "❤️",
-
-                        none:
-                            ""
-
-                    };
-
-
-                    cakeDecoration.textContent =
-                        decorations[
-                            button.dataset.decor
-                        ];
+                    }
 
                 }
             );
@@ -1536,47 +1525,47 @@ document
     );
 
 
-/* =========================================
-   CANDLES
-========================================= */
+/* Candles */
 
 const cakeCandles =
     document.getElementById(
         "cakeCandles"
     );
 
-
 const candleCount =
     document.getElementById(
         "candleCount"
     );
 
-
-let candles = 0;
-
-
-const addCandleButton =
+const addCandle =
     document.getElementById(
         "addCandle"
     );
 
+const removeCandles =
+    document.getElementById(
+        "removeCandles"
+    );
 
-if (addCandleButton) {
+const blowCandles =
+    document.getElementById(
+        "blowCandles"
+    );
 
-    addCandleButton.addEventListener(
+
+let candleNumber = 0;
+
+
+if (addCandle) {
+
+    addCandle.addEventListener(
         "click",
         () => {
 
-            if (
-                candles >= 10
-            ) {
-
-                return;
-
-            }
+            if (candleNumber >= 10) return;
 
 
-            candles++;
+            candleNumber++;
 
 
             const candle =
@@ -1595,7 +1584,7 @@ if (addCandleButton) {
 
 
             candleCount.textContent =
-                candles;
+                candleNumber;
 
         }
     );
@@ -1603,27 +1592,17 @@ if (addCandleButton) {
 }
 
 
-const removeCandlesButton =
-    document.getElementById(
-        "removeCandles"
-    );
+if (removeCandles) {
 
-
-if (removeCandlesButton) {
-
-    removeCandlesButton.addEventListener(
+    removeCandles.addEventListener(
         "click",
         () => {
 
-            candles = 0;
+            candleNumber = 0;
 
+            cakeCandles.innerHTML = "";
 
-            cakeCandles.innerHTML =
-                "";
-
-
-            candleCount.textContent =
-                "0";
+            candleCount.textContent = "0";
 
         }
     );
@@ -1631,25 +1610,13 @@ if (removeCandlesButton) {
 }
 
 
-/* =========================================
-   BLOW CANDLES
-========================================= */
+if (blowCandles) {
 
-const blowCandlesButton =
-    document.getElementById(
-        "blowCandles"
-    );
-
-
-if (blowCandlesButton) {
-
-    blowCandlesButton.addEventListener(
+    blowCandles.addEventListener(
         "click",
         () => {
 
-            if (
-                candles === 0
-            ) {
+            if (candleNumber === 0) {
 
                 alert(
                     "Add some candles first! 🕯️"
@@ -1660,7 +1627,7 @@ if (blowCandlesButton) {
             }
 
 
-            cakeCandles
+            document
                 .querySelectorAll(
                     ".cake-candle"
                 )
@@ -1670,9 +1637,6 @@ if (blowCandlesButton) {
                         candle.classList.add(
                             "blown"
                         );
-
-                        candle.style.opacity =
-                            ".6";
 
                     }
                 );
@@ -1686,9 +1650,7 @@ if (blowCandlesButton) {
 }
 
 
-/* =========================================
-   CAKE DONE
-========================================= */
+/* Cake done */
 
 const cakeDone =
     document.getElementById(
@@ -1713,7 +1675,7 @@ if (cakeDone) {
                     );
 
                 },
-                900
+                700
             );
 
         }
@@ -1722,11 +1684,20 @@ if (cakeDone) {
 }
 
 
-/* =========================================
+/* =========================================================
    CONFETTI
-========================================= */
+========================================================= */
 
 function createConfetti() {
+
+    const symbols = [
+        "❤️",
+        "💕",
+        "✨",
+        "🌸",
+        "🎀"
+    ];
+
 
     for (
         let i = 0;
@@ -1741,14 +1712,10 @@ function createConfetti() {
 
 
         piece.textContent =
-            [
-                "❤️",
-                "💕",
-                "✨",
-                "🎀"
-            ][
+            symbols[
                 Math.floor(
-                    Math.random() * 4
+                    Math.random() *
+                    symbols.length
                 )
             ];
 
@@ -1758,7 +1725,8 @@ function createConfetti() {
 
 
         piece.style.left =
-            Math.random() * 100 +
+            Math.random() *
+            100 +
             "vw";
 
 
@@ -1768,13 +1736,14 @@ function createConfetti() {
 
         piece.style.fontSize =
             (
-                15 +
-                Math.random() * 20
-            ) + "px";
+                13 +
+                Math.random() * 18
+            ) +
+            "px";
 
 
         piece.style.zIndex =
-            "999";
+            "2000";
 
 
         piece.style.pointerEvents =
@@ -1794,16 +1763,17 @@ function createConfetti() {
             () => {
 
                 piece.style.transform =
-                    `translateY(
+                    `
+                    translateY(
                         ${window.innerHeight + 100}px
                     )
                     rotate(
                         ${Math.random() * 720}deg
-                    )`;
+                    )
+                    `;
 
 
-                piece.style.opacity =
-                    "0";
+                piece.style.opacity = "0";
 
             }
         );
@@ -1823,39 +1793,46 @@ function createConfetti() {
 }
 
 
-/* =========================================
-   LOVE MESSAGE CARDS
-========================================= */
+/* =========================================================
+   THREE LITTLE GIFTS
+========================================================= */
 
-const loveCards =
+const giftBoxes =
     document.querySelectorAll(
-        ".love-card"
+        ".gift-box"
     );
-
 
 const loveMessage =
     document.getElementById(
         "loveMessage"
     );
 
-
 const loveMessageText =
     document.getElementById(
         "loveMessageText"
     );
 
+const closeLoveMessage =
+    document.getElementById(
+        "closeLoveMessage"
+    );
 
-loveCards.forEach(
-    card => {
 
-        card.addEventListener(
+giftBoxes.forEach(
+    gift => {
+
+        gift.addEventListener(
             "click",
             () => {
+
+                const message =
+                    gift.dataset.message;
+
 
                 if (loveMessageText) {
 
                     loveMessageText.textContent =
-                        card.dataset.message;
+                        message;
 
                 }
 
@@ -1868,17 +1845,14 @@ loveCards.forEach(
 
                 }
 
+
+                createConfetti();
+
             }
         );
 
     }
 );
-
-
-const closeLoveMessage =
-    document.getElementById(
-        "closeLoveMessage"
-    );
 
 
 if (closeLoveMessage) {
@@ -1901,9 +1875,9 @@ if (closeLoveMessage) {
 }
 
 
-/* =========================================
+/* =========================================================
    FINAL SCREEN
-========================================= */
+========================================================= */
 
 const finalButton =
     document.getElementById(
@@ -1916,6 +1890,15 @@ if (finalButton) {
     finalButton.addEventListener(
         "click",
         () => {
+
+            if (loveMessage) {
+
+                loveMessage.classList.add(
+                    "hidden-element"
+                );
+
+            }
+
 
             createConfetti();
 
@@ -1937,9 +1920,9 @@ if (finalButton) {
 }
 
 
-/* =========================================
+/* =========================================================
    REPLAY
-========================================= */
+========================================================= */
 
 const replayButton =
     document.getElementById(
@@ -1961,20 +1944,15 @@ if (replayButton) {
 }
 
 
-/* =========================================
-   DONE
-========================================= */
+/* =========================================================
+   STARTUP
+========================================================= */
 
 console.log(
-    "❤️ Fatema Birthday Website Loaded!"
+    "❤️ Fatema Birthday Website Loaded"
 );
 
 console.log(
-    "TEST_MODE:",
-    TEST_MODE
-);
-
-console.log(
-    "Birthday unlock:",
-    birthday
+    "🔒 Birthday unlock:",
+    birthday.toString()
 );
