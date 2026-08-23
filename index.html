@@ -1,49 +1,1488 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Happy Birthday Fatema ❤️</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="style.css">
+
 </head>
+
 
 <body>
 
+
+    <!-- =====================================================
+         FLOATING HEARTS
+    ====================================================== -->
+
     <div class="hearts"></div>
-    <div class="overlay"></div>
 
-    <div class="card">
 
-        <h3>❤️ A Special Surprise ❤️</h3>
 
-        <h1>Fatema</h1>
+    <!-- =====================================================
+         SCREEN 0 : COUNTDOWN
+    ====================================================== -->
 
-        <p>
-            Every day with you is a blessing.<br>
-            Your birthday is getting closer...<br>
-            and I can't wait to celebrate it with you.
-        </p>
+    <main id="countdownScreen"
+          class="screen active-screen">
 
-        <div id="countdown"></div>
+        <div class="overlay"></div>
 
-        <p class="message">
-            ✨Something made with love is waiting for you... ❤️
-        </p>
+        <div class="card">
 
-        <button>
-        💌 Opens on 26 August 2026 🎂
-        </button>
+            <h3>
+                ❤️ A Special Surprise ❤️
+            </h3>
 
-    </div>
+            <h1>
+                Fatema
+            </h1>
+
+            <p>
+                Every day with you is a blessing.<br>
+                Your birthday is getting closer...<br>
+                and I can't wait to celebrate it with you.
+            </p>
+
+            <div id="countdown"></div>
+
+            <p class="message">
+                ✨ Something made with love is waiting for you... ❤️
+            </p>
+
+            <button id="countdownButton">
+                💌 Opens on 26 August 2026 🎂
+            </button>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         SCREEN 1 : HAPPY BIRTHDAY
+    ====================================================== -->
+
+    <section id="birthdayScreen"
+             class="screen hidden-screen">
+
+        <div class="birthday-content">
+
+            <div class="cute-character">
+                ( ˶ᵔ ᵕ ᵔ˶ )
+            </div>
+
+            <p class="small-title">
+                ✨ A little surprise for you ✨
+            </p>
+
+            <h1>
+                Happy Birthday
+                <span>Beautiful!</span>
+            </h1>
+
+            <p class="birthday-subtitle">
+                Today is all about celebrating YOU ❤️
+            </p>
+
+            <button class="next-btn"
+                    data-next="milestoneScreen">
+
+                Let's Begin 💕
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 2 : MILESTONE
+    ====================================================== -->
+
+    <section id="milestoneScreen"
+             class="screen hidden-screen">
+
+        <div class="milestone-card">
+
+            <span class="milestone-badge">
+                ✨ MILESTONE BIRTHDAY ✨
+            </span>
+
+            <h2>
+                You turned
+            </h2>
+
+            <div class="age-number"
+                 id="birthdayAge">
+
+                23
+
+            </div>
+
+            <p class="today-text">
+                today 🎂
+            </p>
+
+            <div class="days-lived">
+
+                <span>
+                    You've been shining for
+                </span>
+
+                <strong id="daysLived">
+                    8,398
+                </strong>
+
+                <span>
+                    days ✨
+                </span>
+
+            </div>
+
+            <button class="next-btn"
+                    data-next="memoryScreen">
+
+                Continue 💗
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 3 : MEMORY FRAMES
+    ====================================================== -->
+
+    <section id="memoryScreen"
+             class="screen hidden-screen">
+
+        <div class="memory-container">
+
+            <h2>
+                Some little moments... 🌸
+            </h2>
+
+            <p>
+                A few beautiful memories before the real surprise begins.
+            </p>
+
+
+            <!-- =================================================
+                 MEMORY PHOTOS
+            ================================================== -->
+
+            <div class="memory-frames">
+
+
+                <!-- PHOTO 1 -->
+
+                <div class="memory-frame frame-one">
+
+                    <div class="frame-flower">
+                        🌸
+                    </div>
+
+                    <img src="images/photo2.jpg"
+                         alt="Our memory">
+
+                    <div class="memory-caption">
+
+                        <span>
+                            Our
+                        </span>
+
+                        <strong>
+                            Memories
+                        </strong>
+
+                    </div>
+
+                    <div class="frame-decoration">
+                        ♡
+                    </div>
+
+                </div>
+
+
+
+                <!-- PHOTO 2 -->
+
+                <div class="memory-frame frame-two">
+
+                    <div class="frame-flower">
+                        🌺
+                    </div>
+
+                    <img src="images/photo1.jpg"
+                         alt="Our memory">
+
+                    <div class="memory-caption">
+
+                        <span>
+                            Beautiful
+                        </span>
+
+                        <strong>
+                            Moments
+                        </strong>
+
+                    </div>
+
+                    <div class="frame-decoration">
+                        ♡
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <button class="next-btn"
+                    data-next="letterScreen">
+
+                There's something for you 💌
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 4 : LETTER ENVELOPE
+    ====================================================== -->
+
+    <section id="letterScreen"
+             class="screen hidden-screen">
+
+        <div class="letter-container">
+
+            <h2>
+                A Letter for You... 💌
+            </h2>
+
+            <p class="letter-hint">
+                Tap the envelope to open your letter ❤️
+            </p>
+
+
+            <div id="envelope"
+                 class="envelope">
+
+                <div class="envelope-back"></div>
+
+                <div class="letter-paper">
+
+                    <span>
+                        Dear my love,
+                    </span>
+
+                </div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="envelope-front"></div>
+
+                <div class="heart-seal">
+                    ❤️
+                </div>
+
+            </div>
+
+
+            <p class="tap-text">
+                Tap to open your letter 💕
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 5 : LETTER MESSAGE
+    ====================================================== -->
+
+    <section id="letterMessageScreen"
+             class="screen hidden-screen">
+
+        <div class="full-letter">
+
+            <div class="letter-top">
+                💌
+            </div>
+
+            <h2>
+                To My Beautiful Girl ❤️
+            </h2>
+
+            <div class="letter-text">
+
+                <p>
+                    Happy Birthday, my love! ❤️
+                </p>
+
+                <p>
+                    Dekh kar muskurati hai magar baatein nhi karti,<br>
+                    Uff, tujhse bhi jyaada nakhre hain teri tasveer ke.
+                </p>
+
+                <p>
+                    Thank you for being the beautiful person you are,
+                    for making ordinary moments feel special,
+                    and for bringing so much happiness into my life.
+                </p>
+
+                <p>
+                    I hope this new year of your life brings you
+                    everything your heart wishes for.
+                </p>
+
+                <p>
+                    Always yours,
+                    <br>
+                    <strong>
+                        Me ❤️
+                    </strong>
+                </p>
+
+            </div>
+
+            <button class="next-btn"
+                    data-next="reasonsScreen">
+
+                There's more... 💕
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 6 : 12 REASONS
+    ====================================================== -->
+
+    <section id="reasonsScreen"
+             class="screen hidden-screen">
+
+        <div class="reasons-container">
+
+            <div class="reasons-header">
+
+                <div class="reason-icon">
+                    🎀
+                </div>
+
+                <h2>
+                    12 Reasons Why
+                    <span>
+                        You're Incredible
+                    </span>
+                    ❤️
+                </h2>
+
+                <p>
+                    A few of the countless reasons I adore you.
+                </p>
+
+                <div class="reason-progress">
+
+                    <span id="reasonCounter">
+                        0 / 12 Reasons Revealed ❤️
+                    </span>
+
+                </div>
+
+                <div class="reason-buttons">
+
+                    <button id="revealNext">
+                        Reveal Next ✨
+                    </button>
+
+                    <button id="revealAll">
+                        Reveal All 💕
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="reason-grid"
+                 id="reasonGrid">
+
+
+                <!-- REASON 1 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        01
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            🌸
+                        </span>
+
+                        <h3>
+                            Your sensitivity
+                        </h3>
+
+                        <p>
+                            The way your eyes light up and also get watery when you get overwhelmed.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 2 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        02
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            💗
+                        </span>
+
+                        <h3>
+                            Your varun dhawan smirk
+                        </h3>
+
+                        <p>
+                            Your little smirks in between our conversation.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 3 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        03
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            ✨
+                        </span>
+
+                        <h3>
+                            Your thinking
+                        </h3>
+
+                        <p>
+                            Your way of reasoning and rationality.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 4 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        04
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            😂
+                        </span>
+
+                        <h3>
+                            Your laugh
+                        </h3>
+
+                        <p>
+                            Especially when you laugh with all you hearts like no one's watching.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 5 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        05
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            🌷
+                        </span>
+
+                        <h3>
+                            Your warmth
+                        </h3>
+
+                        <p>
+                            You make people around you feel loved.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 6 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        06
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            ☀️
+                        </span>
+
+                        <h3>
+                            Your soothness
+                        </h3>
+
+                        <p>
+                            You comfort me, you are my peace.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 7 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        07
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            💪
+                        </span>
+
+                        <h3>
+                            Your strength
+                        </h3>
+
+                        <p>
+                            You are stronger than you realize.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 8 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        08
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            🫶
+                        </span>
+
+                        <h3>
+                            Your heart
+                        </h3>
+
+                        <p>
+                            The love you give is something truly special.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 9 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        09
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            🌹
+                        </span>
+
+                        <h3>
+                            Your beauty
+                        </h3>
+
+                        <p>
+                            Inside and out, you are absolutely beautiful.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 10 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        10
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            🥰
+                        </span>
+
+                        <h3>
+                            The way you care
+                        </h3>
+
+                        <p>
+                            You notice the little things that matter #nassnasssivakiff.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 11 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        11
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            💫
+                        </span>
+
+                        <h3>
+                            Your dreams
+                        </h3>
+
+                        <p>
+                            I love watching you chase what matters to you.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REASON 12 -->
+
+                <div class="reason-card">
+
+                    <div class="reason-number">
+                        12
+                    </div>
+
+                    <div class="reason-content">
+
+                        <span>
+                            ❤️
+                        </span>
+
+                        <h3>
+                            Simply you
+                        </h3>
+
+                        <p>
+                            Because there is only one you.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <button id="reasonsContinue"
+                    class="next-btn hidden-element">
+
+                One last little game 🎀
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 7 : CATCH THE HEARTS
+    ====================================================== -->
+
+    <section id="gameScreen"
+             class="screen hidden-screen">
+
+        <div class="game-card">
+
+            <div class="game-header">
+
+                <span>
+                    💕
+                </span>
+
+                <h2>
+                    Catch the Hearts!
+                </h2>
+
+                <p>
+                    Move left & right to catch them!
+                </p>
+
+            </div>
+
+
+            <div class="game-stats">
+
+                <div>
+                    ⏱️
+                    <strong id="gameTimer">
+                        6
+                    </strong>
+                    s
+                </div>
+
+
+                <div class="game-progress">
+
+                    <span id="gameProgress"></span>
+
+                </div>
+
+
+                <div>
+                    ❤️
+                    <strong id="heartScore">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div id="heartGameArea"
+                 class="heart-game-area">
+
+                <div id="playerBasket"
+                     class="player-basket">
+
+                    🧺
+
+                </div>
+
+            </div>
+
+
+            <div id="gameResult"
+                 class="game-result hidden-element">
+
+                <div class="result-heart">
+                    💖
+                </div>
+
+                <h3>
+                    Perfect! ❤️
+                </h3>
+
+                <p>
+                    You caught all the love!
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 8 : CAKE BUILDER
+    ====================================================== -->
+
+    <section id="cakeScreen"
+             class="screen hidden-screen">
+
+        <div class="cake-container">
+
+            <div class="cake-header">
+
+                <span>
+                    🎂
+                </span>
+
+                <h2>
+                    Let's Bake a Cake!
+                </h2>
+
+                <p>
+                    Make a birthday cake just for you ❤️
+                </p>
+
+            </div>
+
+
+            <div class="cake-builder">
+
+
+                <!-- LEFT CONTROLS -->
+
+                <aside class="cake-controls">
+
+                    <div class="cake-tabs">
+
+                        <button class="cake-tab active"
+                                data-tab="flavor">
+
+                            🍰
+
+                            <span>
+                                Flavor
+                            </span>
+
+                        </button>
+
+
+                        <button class="cake-tab"
+                                data-tab="layers">
+
+                            🎂
+
+                            <span>
+                                Layers
+                            </span>
+
+                        </button>
+
+
+                        <button class="cake-tab"
+                                data-tab="frosting">
+
+                            🧁
+
+                            <span>
+                                Frosting
+                            </span>
+
+                        </button>
+
+
+                        <button class="cake-tab"
+                                data-tab="decor">
+
+                            🌸
+
+                            <span>
+                                Decor
+                            </span>
+
+                        </button>
+
+
+                        <button class="cake-tab"
+                                data-tab="candles">
+
+                            🕯️
+
+                            <span>
+                                Candles
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="cake-options">
+
+
+                        <!-- FLAVOR -->
+
+                        <div class="cake-panel active"
+                             data-panel="flavor">
+
+                            <h3>
+                                Choose a flavor
+                            </h3>
+
+
+                            <button class="cake-option selected"
+                                    data-flavor="chocolate">
+
+                                🍫 Chocolate
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-flavor="vanilla">
+
+                                🍦 Vanilla
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-flavor="strawberry">
+
+                                🍓 Strawberry
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-flavor="redvelvet">
+
+                                ❤️ Red Velvet
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- LAYERS -->
+
+                        <div class="cake-panel"
+                             data-panel="layers">
+
+                            <h3>
+                                Choose layers
+                            </h3>
+
+
+                            <button class="cake-option selected"
+                                    data-layers="2">
+
+                                2 Layers
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-layers="3">
+
+                                3 Layers
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-layers="4">
+
+                                4 Layers
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- FROSTING -->
+
+                        <div class="cake-panel"
+                             data-panel="frosting">
+
+                            <h3>
+                                Choose frosting
+                            </h3>
+
+
+                            <div class="frosting-colors">
+
+                                <button class="color-option selected"
+                                        data-frosting="#fff5fa"
+                                        style="--color:#fff5fa">
+                                </button>
+
+
+                                <button class="color-option"
+                                        data-frosting="#ff9fc4"
+                                        style="--color:#ff9fc4">
+                                </button>
+
+
+                                <button class="color-option"
+                                        data-frosting="#ffd4df"
+                                        style="--color:#ffd4df">
+                                </button>
+
+
+                                <button class="color-option"
+                                        data-frosting="#d9a0ff"
+                                        style="--color:#d9a0ff">
+                                </button>
+
+
+                                <button class="color-option"
+                                        data-frosting="#fff0a8"
+                                        style="--color:#fff0a8">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DECOR -->
+
+                        <div class="cake-panel"
+                             data-panel="decor">
+
+                            <h3>
+                                Add decorations
+                            </h3>
+
+
+                            <button class="cake-option"
+                                    data-decor="flowers">
+
+                                🌸 Flowers
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-decor="sprinkles">
+
+                                🌈 Sprinkles
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-decor="hearts">
+
+                                ❤️ Hearts
+
+                            </button>
+
+
+                            <button class="cake-option"
+                                    data-decor="none">
+
+                                ✨ None
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- CANDLES -->
+
+                        <div class="cake-panel"
+                             data-panel="candles">
+
+                            <h3>
+                                Make a wish 🕯️
+                            </h3>
+
+
+                            <button id="addCandle">
+
+                                Add Candle 🕯️
+
+                            </button>
+
+
+                            <button id="removeCandles">
+
+                                Remove All
+
+                            </button>
+
+
+                            <p class="candle-count">
+
+                                <span id="candleCount">
+                                    0
+                                </span>
+
+                                Candles added
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+                </aside>
+
+
+
+                <!-- CAKE PREVIEW -->
+
+                <div class="cake-preview">
+
+                    <div id="cakeDisplay"
+                         class="cake-display">
+
+                        <div class="cake-candles"
+                             id="cakeCandles">
+                        </div>
+
+
+                        <div class="cake-top-decoration"
+                             id="cakeDecoration">
+
+                            🌸
+
+                        </div>
+
+
+                        <div class="cake-top"
+                             id="cakeTop">
+                        </div>
+
+
+                        <div class="cake-body">
+
+                            <div class="cake-layer layer-one"></div>
+
+                            <div class="cake-layer layer-two"></div>
+
+                            <div class="cake-layer layer-three"></div>
+
+                            <div class="cake-layer layer-four"></div>
+
+                        </div>
+
+
+                        <div class="cake-plate">
+                        </div>
+
+                    </div>
+
+
+                    <div class="cake-actions">
+
+                        <button id="blowCandles">
+                            💨 Blow Candles
+                        </button>
+
+
+                        <button id="cakeDone">
+                            Done! 🎂
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 9 : FINAL MESSAGES
+    ====================================================== -->
+
+    <section id="messageCardsScreen"
+             class="screen hidden-screen">
+
+        <div class="message-cards-container">
+
+            <div class="message-heading">
+
+                <span>
+                    💌
+                </span>
+
+                <h2>
+                    A few more things...
+                </h2>
+
+                <p>
+                    Because one birthday message could never be enough.
+                </p>
+
+            </div>
+
+
+            <div class="love-cards">
+
+
+                <button class="love-card"
+                        data-message="You make my world brighter just by being in it. ☀️❤️">
+
+                    <span>
+                        🌸
+                    </span>
+
+                    <strong>
+                        Open me
+                    </strong>
+
+                    <small>
+                        There's something inside...
+                    </small>
+
+                </button>
+
+
+
+                <button class="love-card"
+                        data-message="No matter where life takes us, I will always be cheering for you. 🫶">
+
+                    <span>
+                        💗
+                    </span>
+
+                    <strong>
+                        Another one
+                    </strong>
+
+                    <small>
+                        A little reminder...
+                    </small>
+
+                </button>
+
+
+
+                <button class="love-card"
+                        data-message="If I had to choose you all over again, I'd choose you every single time. ❤️">
+
+                    <span>
+                        🎀
+                    </span>
+
+                    <strong>
+                        One more
+                    </strong>
+
+                    <small>
+                        Just for you...
+                    </small>
+
+                </button>
+
+
+            </div>
+
+
+            <div id="loveMessage"
+                 class="love-message hidden-element">
+
+                <div class="message-heart">
+                    ❤️
+                </div>
+
+                <p id="loveMessageText">
+                </p>
+
+                <button id="closeLoveMessage">
+                    Aww 🥹
+                </button>
+
+            </div>
+
+
+            <button id="finalButton"
+                    class="next-btn">
+
+                Finally... 💕
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCREEN 10 : FINAL BIRTHDAY
+    ====================================================== -->
+
+    <section id="finalScreen"
+             class="screen hidden-screen">
+
+        <div class="final-content">
+
+            <div class="final-hearts">
+                ❤️ 💕 ❤️
+            </div>
+
+
+            <div class="final-character">
+                🧸
+            </div>
+
+
+            <p class="final-small">
+                From my heart to yours...
+            </p>
+
+
+            <h1>
+                Happiest Birthday,
+                <span>
+                    My Love!
+                </span>
+            </h1>
+
+
+            <div class="final-divider">
+                ✦ ❤️ ✦
+            </div>
+
+
+            <p class="final-message">
+
+                Kaise dekhun me kisi aur ko,
+                Ki meri aankho me sirf tum ho.
+                <br>
+
+                Nazare laakh haseen sahi,
+                Magar meri nazar me khoobsurat sirf tum ho.
+                <br>
+
+                Chand, taare, phool, khushbhuyein,
+                shayar ye sab bhi achha hai,
+                <br>
+
+                Magar kya karu me in sab ka,
+                Ki mere liye kaafi sirf tum ho.
+
+                <br><br>
+
+                I love you more than words can ever explain. ❤️
+
+            </p>
+
+
+            <div class="final-signature">
+
+                Forever yours,
+
+                <br>
+
+                <strong>
+                    ❤️
+                </strong>
+
+            </div>
+
+
+            <button id="replayButton"
+                    class="next-btn">
+
+                Replay Your Surprise 🔄
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
     <script src="script.js"></script>
 
+
 </body>
+
 </html>
