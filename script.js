@@ -129,7 +129,7 @@ const countdownButton =
 */
 
 const birthday =
-    new Date("2026-08-26T14:57:00+05:30");
+    new Date("2026-08-23T20:30:00+05:30");
 
 
 function isBirthdayUnlocked() {
