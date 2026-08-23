@@ -2446,4 +2446,131 @@ button {
         padding: 14px 11px;
     }
 
+}/* =========================================================
+   FINAL FIX — REASONS SCREEN
+========================================================= */
+
+#reasonsScreen {
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-top: 25px;
+    padding-bottom: 30px;
 }
+
+.reasons-container {
+    width: 1050px;
+    max-width: 96%;
+    margin: 0 auto;
+}
+
+.reasons-header {
+    margin-bottom: 12px;
+}
+
+.reasons-header h2 {
+    font-size: 30px;
+    margin: 5px auto;
+}
+
+.reasons-header > p {
+    font-size: 13px;
+}
+
+.reason-icon {
+    font-size: 28px;
+}
+
+.reason-progress {
+    margin: 10px auto;
+    padding: 7px;
+}
+
+.reason-buttons {
+    margin-bottom: 10px;
+}
+
+.reason-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.reason-card {
+    min-height: 120px;
+    padding: 13px;
+    border-radius: 16px;
+}
+
+.reason-number {
+    font-size: 18px;
+    right: 9px;
+    top: 6px;
+}
+
+.reason-content span {
+    font-size: 23px;
+}
+
+.reason-content h3 {
+    font-size: 13px;
+    margin: 4px 0;
+}
+
+.reason-content p {
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+#reasonsContinue {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+
+
+/* TABLET */
+
+@media (max-width: 900px) {
+
+    .reason-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* PHONE */
+
+@media (max-width: 600px) {
+
+    #reasonsScreen {
+        padding-top: 18px;
+        padding-bottom: 25px;
+    }
+
+    .reasons-header h2 {
+        font-size: 25px;
+    }
+
+    .reason-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .reason-card {
+        min-height: 120px;
+        padding: 11px;
+    }
+
+    .reason-content span {
+        font-size: 22px;
+    }
+
+    .reason-content h3 {
+        font-size: 12px;
+    }
+
+    .reason-content p {
+        font-size: 9px;
+    }
+
+
